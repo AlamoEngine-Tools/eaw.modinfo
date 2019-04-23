@@ -95,6 +95,6 @@ Steam Tags as specified by the Steam Uploader.
 
 At least either `EAW` or `FOC` is required to determine the game the mod shows up for.
 
-### The `"custom"` Tag
+### The `"custom"` Tag [OPTIONAL]
 
-The `custom` tag allows arbitrary extensions to the format. Programs implementing the core format should always be able to serialize the whole object, but the custom data extension has to be accounted for where applicable.
+The `custom` tag allows arbitrary extensions to the format. Programs implementing the core format should always be able to serialize the whole object, but the custom data wrapped within the extension object has to be accounted for only where applicable and/or needed.
