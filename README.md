@@ -36,6 +36,9 @@ The following sections specify the required and optional content for `eaw.modinf
       "FOC",
       "Singleplayer"
     ]
+  },
+  "custom":{
+    "my_custom_key": "My important additional value."
   }
 }
 ```
@@ -91,3 +94,7 @@ Arbitrary metadata as string.
 Steam Tags as specified by the Steam Uploader.
 
 At least either `EAW` or `FOC` is required to determine the game the mod shows up for.
+
+### The `"custom"` Tag
+
+The `custom` tag allows arbitrary extensions to the format. Programs implementing the core format should always be able to serialize the whole object, but the custom data extension has to be accounted for where applicable.
