@@ -24,7 +24,6 @@ The following sections specify the required and optional content for `eaw.modinf
   "description": "A generic description about the mod in Steam-flavoured BBCode.\nNice, eh?",
   "icon": "relative/path/to/icon.png",
   "version": "1.0.0.0",
-  "modid": "the_mods_name",
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
     "contentfolder": "folder",
@@ -58,10 +57,6 @@ The relative path to the mod's preview image. This will also be used for the Ste
 ### The `"version"` Tag [OPTIONAL]
 
 The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/) that also supports a fourth digits for build increments, etc. and suffixes (e.g. `"-rc1"`).
-
-### The `"modid"` Tag [OPTIONAL]
-
-A unique and normalised ID for the mod. This does not have to correlate to the Steam Workshop ID.
 
 ### The `"steamdata"` Tag [OPTIONAL]
 
