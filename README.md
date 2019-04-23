@@ -55,7 +55,7 @@ The relative path to the mod's preview image. This will also be used for the Ste
 
 **WARNING**: This tag is *REQUIRED* if `steamdata` is used.
 
-### The `"version"` Tag [REQUIRED]
+### The `"version"` Tag [OPTIONAL]
 
 The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/) that also supports a fourth digits for build increments, etc. and suffixes (e.g. `"-rc1"`).
 
