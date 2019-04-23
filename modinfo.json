@@ -3,7 +3,6 @@
   "description": "Optional description",
   "icon": "path/to/icon.png",
   "version": "Mod Version",
-  "modid": "unique_id",
   "steamdata": {
     "publishedfileid": "Steam workshop ID",
     "contentfolder": "content folder name",
