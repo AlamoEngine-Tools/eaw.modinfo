@@ -1,7 +1,7 @@
 {
   "name": "Replace this with your mod's name",
-  "description": "Optional description",
-  "icon": "path/to/icon.png",
+  "summary": "Optional summary",
+  "icon": "path/to/icon.ico",
   "version": "Mod Version",
   "steamdata": {
     "publishedfileid": "Steam workshop ID",
