@@ -1,4 +1,4 @@
-# eaw.modinfo Definition - v1.0.0
+# eaw.modinfo Definition - v1.0.1
 
 A standard definition for Star Wars: Empire at War mod info files.
 
@@ -21,8 +21,8 @@ The following sections specify the required and optional content for `eaw.modinf
 ```json
 {
   "name": "The mod's name",
-  "description": "A generic description about the mod in Steam-flavoured BBCode.\nNice, eh?",
-  "icon": "relative/path/to/icon.png",
+  "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
+  "icon": "relative/path/to/icon.ico",
   "version": "1.0.0.0",
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
@@ -47,15 +47,13 @@ The following sections specify the required and optional content for `eaw.modinf
 
 This tag specifies the fully qualified mod name, e.g. "Republic at War", "Thrawn's Revenge: Imperial Civil War", "Awakening of the Rebellion" or "Yuuzhan Vong at War"
 
-### The `"description"` Tag [OPTIONAL]
+### The `"summary"` Tag [OPTIONAL]
 
-This tag allows you to include a description including Steam-flavoured BBCode.
+This tag allows you to include a short summary about the mod supporting Steam-flavoured BBCode.
 
 ### The `"icon"` Tag [OPTIONAL]
 
-The relative path to the mod's preview image. This will also be used for the Steam Preview image.
-
-**WARNING**: This tag is *REQUIRED* if `steamdata` is used.
+The relative path to the mod's icon file.
 
 ### The `"version"` Tag [OPTIONAL]
 
