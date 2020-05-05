@@ -1,4 +1,4 @@
-# eaw.modinfo Definition - v1.0.1
+# eaw.modinfo Definition - v1.1.0
 
 A standard definition for Star Wars: Empire at War mod info files.
 
@@ -24,6 +24,16 @@ The following sections specify the required and optional content for `eaw.modinf
   "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
   "icon": "relative/path/to/icon.ico",
   "version": "1.0.0.0",
+  "dependencies": [
+	{
+		"modtype": 0,
+		"location": "relative/or/absolute/path"		
+	},
+	{
+		"modtype": 1,
+		"location": "STEAMID"		
+	}	
+  ],
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
     "contentfolder": "folder",
@@ -58,6 +68,25 @@ The relative path to the mod's icon file.
 ### The `"version"` Tag [OPTIONAL]
 
 The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/) that also supports a fourth digits for build increments, etc. and suffixes (e.g. `"-rc1"`).
+
+### The `"dependencies"` Tag [OPTIONAL]
+
+The `dependencies` container holds an ordered list of other mods instances this mod relies on.
+The first item of the list is the most base mod, every `n+1` mod is an sub mod of `n`. The mod of the this modinfo.json file must not be listed here!
+The list is either absent from the `modinfo.json` or contains at least one item.
+
+#### The `"dependencies.modtype"` Tag
+
+The modtype enumeration:
+
+| Value | Meaning |
+|:--:|:--|
+|0|any normal mod inside the Mods/ directory|
+|1|a Steam Workshops mod|
+
+#### The `"dependencies.location"` Tag
+
+This property either contains an absolute or relative path of the parent mod or holds the STEAMID for workshop mods.
 
 ### The `"steamdata"` Tag [OPTIONAL]
 
