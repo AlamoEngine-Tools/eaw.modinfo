@@ -25,13 +25,13 @@ The following sections specify the required and optional content for `eaw.modinf
   "icon": "relative/path/to/icon.ico",
   "version": "1.0.0.0",
   "dependencies": [
-	{
-		"modtype": 0,
-		"location": "relative/or/absolute/path"		
+    {
+	  "modtype": 0,
+	  "location": "relative/or/absolute/path"		
 	},
 	{
-		"modtype": 1,
-		"location": "STEAMID"		
+	  "modtype": 1,
+	  "location": "STEAMID"		
 	}	
   ],
   "steamdata": {
