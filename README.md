@@ -8,12 +8,13 @@ The following sections specify the required and optional content for `eaw.modinf
 
 ## Contents of the Specification:
 1. [Allowed File Names](#filename)
-1. [File Position](#file-position)
-1. [Exemplary Content](#exemplary-content)
-1. [`modinfo` Type Specification](#the-modinfo-type)
-1. [`modreference` Type Specification](#the-modreference-type)
-1. [`steamdata` Type Specification](#the-steamdata-type)
-1. [Dependency Resolving](#pependency-resolving)
+2. [File Position](#file-position)
+3. [Exemplary Content](#exemplary-content)
+4. [`modinfo` Type Specification](#the-modinfo-type)
+5. [`modreference` Type Specification](#the-modreference-type)
+6. [`steamdata` Type Specification](#the-steamdata-type)
+7. [Dependency Resolving](#dependency-resolving)
+8. [Dendepency Test Cases](#dependency-resolving-test-cases)
 
 ## Filename
 
@@ -93,7 +94,9 @@ If there are only variant files they each act as a main file on their own.
 
 **Description:**
 
-This property specifies the fully qualified mod name, e.g. "Republic at War", "Thrawn's Revenge: Imperial Civil War", "Awakening of the Rebellion" or "Yuuzhan Vong at War"
+This property specifies the fully qualified mod name, e.g. "Republic at War", "Thrawn's Revenge: Imperial Civil War", "Awakening of the Rebellion" or "Yuuzhan Vong at War".
+
+This property **must** also be present for variant modinfos that aim for overriding the main `modinfo.json`
 
 ### The `"summary"` Property
 
