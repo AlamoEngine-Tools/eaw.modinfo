@@ -131,7 +131,9 @@ The modtype enumeration:
 
 Becuase a workshop mod in theroy also is a `default` mod the number values are chooses the way they are. *
 
-**Added for v1.2:** `2` - Virtual Mod Types. A virtual mod does not exists on disk but is only a logical container that holds dependency information. This is currently not supported and only acts as a placeholder in this version of the specification. 
+**Added for v1.2:** 
+
+`2 : Virtual Mod Types`. A virtual mod does not exists on disk but is only a logical container that holds dependency information. This is currently not supported and only acts as a placeholder in this version of the specification. 
 
 #### The `"mod_reference.identifier"` Tag
 
