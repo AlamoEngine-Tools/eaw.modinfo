@@ -75,7 +75,7 @@ The mod's version according to the extended semantic versioning: [Semantic Versi
 
 ### The `"dependencies"` Tag [OPTIONAL]
 
-The `dependencies` container holds an ordered list of `"mod_reference type"`s this mod relies on.
+The `dependencies` container holds an ordered list of [`"mod_reference type"`](#the-mod_reference-type)s this mod relies on.
 
 The list is either absent from the `modinfo.json` or contains at least one item.
 
@@ -106,7 +106,7 @@ A --- D
 
 ### The `"steamdata"` Tag [OPTIONAL]
 
-The `steamdata` container holds additional info that is required for the Steam Version of the game.
+The [`"steamdata type"`](#the-streamdata-type) container holds additional info that is required for the Steam Version of the game.
 The container is either absent from the `modinfo.json` or it is fully required.
 
 ### The `"custom"` Tag [OPTIONAL]
