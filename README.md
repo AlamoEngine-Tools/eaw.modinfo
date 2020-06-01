@@ -6,13 +6,31 @@ The info files defined herein allow mod makers and tool makers to specify metain
 
 ### Filename
 
-The metainformation has to be saved in a `JSON` file called `modinfo.json`.
+**Changed for v1.2:**
+
+The meta information must be saved to a `JSON` file. There are two ways for naming the file
+
+1. The file is called `modinfo.json`. This is considered as the *main file* 
+2. The file is called `[Any_FS_compliant_letter]-modinfo.json`. This is considered as a *variant file.*
+
+
+Options `2` can be used if you want to create different variants of a mod that share the same files you can create variants of a `modinfo.json` file. 
+
+*Imagine if your mod is a submod for not only one but two different mods. This way you only need to develop and upload the mod once but it can target both base mods simultaneously.* 
+
+*Implementation Notes: In practice this will instanciate a new mod for each variant available.*
 
 ### File Position
 
-The `modinfo.json` has to be located at the top level of the mod folder next to the `data` folder.
+**Changed for v1.2:**
+The target directory is the top level of the mod's folder (next to where the mod's `data` folder is).
 
-**Added for v1.2:**
+It may contain none, one or multiple files, as described in [Filename](#filename).
+
+If there exists variant files AND a main file the content from the main file gets merged into the variant file undless the variant overrides a property.
+
+If there are only variant files they each act as a main file on their own. 
+
 
 ### File Content
 
