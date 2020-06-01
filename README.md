@@ -106,7 +106,7 @@ A --- D
 
 ### The `"steamdata"` Tag [OPTIONAL]
 
-The [`"steamdata type"`](#the-streamdata-type) container holds additional info that is required for the Steam Version of the game.
+The [`"steamdata type"`](#the-steamdata-type) container holds additional info that is required for the Steam Version of the game.
 The container is either absent from the `modinfo.json` or it is fully required.
 
 ### The `"custom"` Tag [OPTIONAL]
@@ -139,7 +139,7 @@ This property either contains an absolute or relative path of the parent mod or 
 
 ---
 
-## The `"streamdata"` Type
+## The `"steamdata"` Type
 
 ### The `"steamdata.publishedfileid"` Tag
 
