@@ -39,9 +39,11 @@ The target directory is the top level of the mod's folder (next to where the mod
 
 It may contain none, one or multiple files, as described in [Filename](#filename).
 
-If there exists variant files AND a main file the content from the main file gets merged into the variant file undless the variant overrides a property.
+If there exists variant files AND a main file the content from the main file gets merged into the variant file undless the variant overrides a property.  
 
 If there are only variant files they each act as a main file on their own. 
+
+*Implementation Notes: As soon as a mod folder contains modinfo variant files, only these should yield an instance of a mod. The main modinfo file (if existing) or just the directry itself should get ignored.*
 
 ## Exemplary Content
 
