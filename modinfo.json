@@ -1,17 +1,34 @@
 {
-  "name": "Replace this with your mod's name",
-  "summary": "Optional summary",
-  "icon": "path/to/icon.ico",
-  "version": "Mod Version",
+  "name": "The mod's name",
+  "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
+  "icon": "relative/or/absolute/path/to/icon.ico",
+  "version": "1.0.0.0",
+  "dependencies": [
+    {
+	  "modtype": 0,
+	  "identifier": "relative/or/absolute/path"		
+	},
+	{
+	  "modtype": 1,
+	  "identifier": "STEAMID"		
+	}	
+  ],
   "steamdata": {
-    "publishedfileid": "Steam workshop ID",
-    "contentfolder": "content folder name",
-    "visibility": 0,
+    "publishedfileid": "xxxxxxxxxx",
+    "contentfolder": "folder",
+    "visibility": 1,
     "metadata": "",
     "tags":[
-      //FOC
-      //EAW
+      "Multiplayer",
+      "Land",
+      "Space",
+      "FOC",
+      "Singleplayer"
     ]
   },
-  "custom":{}
+  "custom": [
+    {
+      "my_custom_key": "My important additional value."
+    }
+  ]
 }

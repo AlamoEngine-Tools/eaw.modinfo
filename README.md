@@ -1,10 +1,10 @@
-# eaw.modinfo Definition - v1.2.0
+# eaw.modinfo Definition - v2.0
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 1.2.0.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.0.
 
 ## Contents of the Specification:
 1. [Allowed File Names](#filename)
@@ -18,15 +18,13 @@ The following sections specify the required and optional content for `eaw.modinf
 
 ## Filename
 
-**Changed for v1.2:**
+The meta information must be saved to a `JSON` file. There are two ways for naming the file:
 
-The meta information must be saved to a `JSON` file. There are two ways for naming the file
-
-1. The file is called `modinfo.json`. This is considered as the *main file* 
+1. The file is called `modinfo.json`. This is considered as the *main file*.
 2. The file is called `[Any_FS_compliant_letter]-modinfo.json`. This is considered as a *variant file.*
 
 
-Options `2` can be used if you want to create different variants of a mod that share the same files you can create variants of a `modinfo.json` file. 
+Option `2` can be used if you want to create different variants of a mod that share the same files. 
 
 *Imagine if your mod is a submod for not only one but two different mods. This way you only need to develop and upload the mod once but it can target both base mods simultaneously.* 
 
@@ -34,14 +32,13 @@ Options `2` can be used if you want to create different variants of a mod that s
 
 ## File Position
 
-**Changed for v1.2:**
 The target directory is the top level of the mod's folder (next to where the mod's `data` folder is).
 
 It may contain none, one or multiple files, as described in [Filename](#filename).
 
-If there exists variant files AND a main file the content from the main file gets merged into the variant file undless the variant overrides a property.  
+If there exists variant files AND a main file the content from the main file gets merged into the variant file unless the variant overrides a property.  
 
-If there are only variant files they each act as a main file on their own. 
+If there are only variant files they each act as a main files on their own. 
 
 *Implementation Notes: As soon as a mod folder contains modinfo variant files, only these should yield an instance of a mod. The main modinfo file (if existing) or just the directry itself should get ignored.*
 
@@ -51,7 +48,7 @@ If there are only variant files they each act as a main file on their own.
 {
   "name": "The mod's name",
   "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
-  "icon": "relative/path/to/icon.ico",
+  "icon": "relative/or/absolute/path/to/icon.ico",
   "version": "1.0.0.0",
   "dependencies": [
     {
@@ -122,7 +119,7 @@ This property allows you to include a short summary about the mod supporting Ste
 
 **Description:**
 
-The path to the mod's icon file **relative** to the mod's root directory.
+The path to the mod's icon file **relative** to the mod's root directory or an **absolute** path.
 
 ### The `"version"` Property
 
@@ -150,13 +147,12 @@ The `dependencies` container holds an ordered list of [`"modreference type"`](#t
 
 The list is either absent from the `modinfo.json` or contains at least one item.
 
-**Changes for v1.2:**
-The first mod in the list resembles the mod you actually want to launch. Every `n+1` mod is another mod the current one relies on. 
+The first mod in the list resembles the closest dependeny. Every `n+1` item is another dependeny of the target mod.
 If a dependency has dependencies itself these **must not** be added to the list.
 
 **The mod of the this modinfo.json file must not be listed here because that would result in a cycle!**
 
-Here is an example what it means when the list contains two mod references:
+Here is an example what it means when the list contains three mod references:
 Imagine this mod is called `A`. 
 The dependencies list contains the mods `[C, D, B]`. 
 
@@ -185,8 +181,6 @@ The [`"steamdata type"`](#the-steamdata-type) container holds additional info th
 The container is either absent from the `modinfo.json` or it is fully required.
 
 ### The `"custom"` Property
-
-**Changed for v1.2:**
 
 **Level:** *OPTIONAL*
 
@@ -224,8 +218,6 @@ The modtype enumeration:
 *Reasonable: The current mod does NOT contain a `modtype` property because the mod should not know it's owen type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design coice was made because mod linking should always be considered for Steam Workshop mods. For convenient test for mod creators we keep the possibility to reference to local mods.*
 
 *Becuase a workshop mod in theroy also is a `default` mod the number values are chooses the way they are.*
-
-**Added for v1.2:** 
 
 `2 : Virtual Mod Types`. A virtual mod does not exists on disk but is only a logical container that holds dependency information. This is currently not supported and only acts as a placeholder in this version of the specification. 
 
@@ -315,7 +307,7 @@ Steam Tags as specified by the Steam Uploader.
 At least either `EAW` or `FOC` is required to determine the game the mod shows up for.
 
 ## Dependency Resolving
-The game supports chaining (could also be called overriding or linking) mods by queuing up the command line arguments `STEAMMOD` and/or `MODPATH`. 
+The game supports chaining (could also be called *overriding* or *linked*) mods by queuing up the command line arguments `STEAMMOD` and/or `MODPATH`. 
 While the Command Line options only can resemble a line (or more precisely a Queue), real mod dependencies can look like complex tree due to multiple inheritance. Thus there needs to be a deterministic logic to convert the real hierachy into a CLI compatible representation. 
 
 To describe relations between mods this specification introduces an optional [`dependency`](#the-dependencies-property) property which is an ordered list. Each item in the list branches from current mod, which fullfils the multiple inheritance logic.
