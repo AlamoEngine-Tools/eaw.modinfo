@@ -318,7 +318,7 @@ Implementations of this standard must fullfill the following requirements to cre
 1. The `dependencies` list MUST be processed from start to end.
 2. Before processing dependiencies of `n+1` (where n is the current processed mod) all dependencies of `n` must be processed first.
 3. Duplicates MUST be removed. *Having duplicates that are not direct neighbours is a strong indicator for a dependency cycle!*
-4. The implementation MUST be able to recognice and react on dependency cycles. 
+4. The implementation MUST be able to recognise and respond to identified dependency cycles accordingly. 
 5. The provided [test cases](#dependency-resolving-test-cases) MUST pass:
 6. The result of the *flattening* MAY get reversed depending on the requirements of the consumer.
 
