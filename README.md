@@ -217,7 +217,7 @@ The modtype enumeration:
 
 *Rationale: The current mod does NOT contain a `modtype` property because the mod should not have to know it's own type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design coice was made because mod linking should always be considered for Steam Workshop mods. The possibility to reference local mods is a convenience functionality intended to be used by mod developers for test setups and development.*
 
-*Becuase a workshop mod in theroy also is a `default` mod the number values are chooses the way they are.*
+*Because a workshop mod in theroy also is the `default` mod type the numeric enumeration values are choosen the way they are.*
 
 `2 : Virtual Mod Types`. A virtual mod does not exists on disk but is only a logical container that holds dependency information. This is currently not supported and only acts as a placeholder in this version of the specification. 
 
