@@ -40,7 +40,7 @@ If there exists at least one variant file AND a main file the content from the m
 
 If there are only variant files they each act as a main files on their own. 
 
-*Implementation Notes: As soon as a mod folder contains modinfo variant files, only these should yield an instance of a mod. The main modinfo file (if existing) or just the directry itself should get ignored.*
+*Implementation Notes: As soon as a mod folder contains modinfo variant files, only these should yield an instance of a mod. The main modinfo file (if existing) or just the directry itself should be ignored.*
 
 ## Exemplary Content
 
@@ -444,4 +444,3 @@ E-D
 
 Cycle!
 ``` 
-
