@@ -150,7 +150,7 @@ The list is either absent from the `modinfo.json` or contains at least one item.
 The first mod in the list resembles the closest dependeny. Every `n+1` item is another dependeny of the target mod.
 If a dependency has dependencies itself these **must not** be added to the list.
 
-**The mod of the this modinfo.json file must not be listed here because that would result in a cycle!**
+**The mod described by the current `modinfo.json` file must not be listed here, including it would result in a cycle!**
 
 Here is an example what it means when the list contains three mod references:
 Imagine this mod is called `A`. 
