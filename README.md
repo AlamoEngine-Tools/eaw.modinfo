@@ -328,7 +328,7 @@ Implementations of this standard must fullfill the following requirements to cre
 
 ### Dependency Resolving Test Cases
 
-Node `A` is always the mod that should get executed. Everything behind  `:` means these are the direct dependencies.
+Node `A` is always the mod that should be loaded. Every mod following after  `:` are direct dependencies of the mod, if multiple they are separated by a comma.
 
 ```
 A : B, C
