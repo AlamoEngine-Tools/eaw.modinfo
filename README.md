@@ -324,7 +324,7 @@ Implementations of this standard must fullfill the following requirements to cre
 
 *Note: Converting a (non-binary) tree structure to a flatteded and duplicate-free line is a one-way operation. It also looses accuracy. The requirements above are created to ensure consistency across multiple implementations.*
 
-*Advise: For making sure you mod always work as intended, we recommend to keep the inheritance level to a minimum. Also try to avoid multiple inheritances.*
+*Advise: For making sure your mod always works as intended, we recommend to keep the inheritance level to a minimum. Also try to avoid multiple inheritances.*
 
 ### Dependency Resolving Test Cases
 
