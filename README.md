@@ -36,7 +36,7 @@ The target directory is the top level of the mod's folder (next to where the mod
 
 It may contain none, one or multiple files, as described in [Filename](#filename).
 
-If there exists variant files AND a main file the content from the main file gets merged into the variant file unless the variant overrides a property.  
+If there exists at least one variant file AND a main file the content from the main file gets merged into the variant file(-s) unless the variant overrides a property.  
 
 If there are only variant files they each act as a main files on their own. 
 
@@ -444,5 +444,4 @@ E-D
 
 Cycle!
 ``` 
-
 
