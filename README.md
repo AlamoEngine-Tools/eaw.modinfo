@@ -215,7 +215,7 @@ The modtype enumeration:
 |`1`|a Steam Workshops mod|
 |`2`|a "virtual" mod. (Currently unsupported)|
 
-*Reasonable: The current mod does NOT contain a `modtype` property because the mod should not know it's owen type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design coice was made because mod linking should always be considered for Steam Workshop mods. For convenient test for mod creators we keep the possibility to reference to local mods.*
+*Rationale: The current mod does NOT contain a `modtype` property because the mod should not have to know it's own type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design coice was made because mod linking should always be considered for Steam Workshop mods. The possibility to reference local mods is a convenience functionality intended to be used by mod developers for test setups and development.*
 
 *Becuase a workshop mod in theroy also is a `default` mod the number values are chooses the way they are.*
 
