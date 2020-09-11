@@ -1,20 +1,26 @@
-# eaw.modinfo Definition - v2.0
+# eaw.modinfo Definition - v2.1
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.0.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.1.
 
 ## Contents of the Specification:
-1. [Allowed File Names](#filename)
-2. [File Position](#file-position)
-3. [Exemplary Content](#exemplary-content)
-4. [`modinfo` Type Specification](#the-modinfo-type)
-5. [`modreference` Type Specification](#the-modreference-type)
-6. [`steamdata` Type Specification](#the-steamdata-type)
-7. [Dependency Resolving](#dependency-resolving)
-8. [Dendepency Test Cases](#dependency-resolving-test-cases)
+1. [Changes](#notable-changes)
+2. [Allowed File Names](#filename)
+3. [File Position](#file-position)
+4. [Exemplary Content](#exemplary-content)
+5. [`modinfo` Type Specification](#the-modinfo-type)
+6. [`modreference` Type Specification](#the-modreference-type)
+7. [`language` Type Specification](#the-language-type)
+8. [`steamdata` Type Specification](#the-steamdata-type)
+9. [Dependency Resolving](#dependency-resolving)
+10. [Dendepency Test Cases](#dependency-resolving-test-cases)
+
+## Notable Changes
+
+- *v2.1:* Added support to express language support.
 
 ## Filename
 
@@ -59,6 +65,19 @@ If there are only variant files they each act as a main files on their own.
 	  "modtype": 1,
 	  "identifier": "STEAMID"		
 	}	
+  ],
+  "languages": [
+    {
+      "code": "en"
+    },
+    {
+      "code": "de",
+      "support": 0
+    },
+    {
+      "code": "es",
+      "support": 1
+    }
   ],
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
@@ -166,12 +185,25 @@ A - D
   B
 ```
 
+### The `"languages"` Property
+
+**Level:** *OPTIONAL*
+
+**Data Type**:  [`language`](#the-language-type)`[]`
+
+**Data Semantics**: Collection of supported languages
+
+**Description:**
+
+This property holds a collection of [`language`](#the-language-type) objects. Each item indicates a language that is supported by the mod. 
+
+The property is optional. When *NOT* present, the language **English** is assumed to be default. However if the property is defined the language *MUST* be inclued when supported by the mod.
 
 ### The `"steamdata"` Property
 
 **Level:** *OPTIONAL*
 
-**Data Type**: [`steamdata`](#tthe-steamdata-type)  
+**Data Type**: [`steamdata`](#the-steamdata-type)  
 
 **Data Semantics**: Steam Workshops JSON
 
@@ -232,6 +264,46 @@ The modtype enumeration:
 **Description:**
 
 This property either contains an absolute or relative path of the parent mod or holds the STEAMID for workshop mods.
+
+---
+
+## The `"language"` Type
+
+#### The `"language.code"` Property
+
+**Level:** **REQUIRED**
+
+**Data Type**: `string`
+
+**Data Semantics**: Language Code
+
+**Description:**
+
+This property holds an [ISO 639-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) two letter language code.
+
+#### The `"language.support"` Property
+
+**Level:** *OPTIONAL*
+
+**Data Type**: Enum
+
+**Data Semantics**: Level of language support
+
+**Description:**
+
+The language support enumeration acts as a bit flag and is defined as follows:
+
+| Value | Meaning |
+|:--:|:--|
+|`0`| ***Default:*** Same as `7`. | 
+|`1`| **Text:** A `mastertextfile_xxx.dat` is available in this language.|
+|`2`|**Speech**: Speech event files are in their own language folder. (Important for Movies, Missions and Holograms)|
+|`4`|**SFX** Sound effects, such as unit actions, are localized. |
+|`7`|**Fully localized:** Combines `1`, `2`, `4`|
+
+When the property was omitted for a `language` object, value `0` (fully localized) is applied.
+
+*Rationale: Though we are considering this enumeration as bit filed, value 0 was choosen to represent a fully translated mod, too because in most programming languages value `0` is default for enums. Thus the spec allows to omitt the property.*  
 
 ---
 

@@ -13,6 +13,19 @@
 	  "identifier": "STEAMID"		
 	}	
   ],
+  "languages": [
+    {
+      "code": "en"
+    },
+    {
+      "code": "de",
+      "support": 0
+    },
+    {
+      "code": "es",
+      "support": 1
+    }
+  ],
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
     "contentfolder": "folder",
