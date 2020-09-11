@@ -197,7 +197,7 @@ A - D
 
 This property holds a collection of [`language`](#the-language-type) objects. Each item indicates a language that is supported by the mod. 
 
-The property is optional. When *NOT* present, the language **English** is assumed to be default. However if the property is defined the language *MUST* be inclued when supported by the mod.
+The property is optional. When *NOT* present, the language **English** (`"en"`) is assumed to be default. However if the property is defined English *MUST* be inclued when supported by the mod, too.
 
 ### The `"steamdata"` Property
 
@@ -279,7 +279,7 @@ This property either contains an absolute or relative path of the parent mod or 
 
 **Description:**
 
-This property holds an [ISO 639-1](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) two letter language code.
+This property holds an [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) two letter language code.
 
 #### The `"language.support"` Property
 
@@ -303,7 +303,7 @@ The language support enumeration acts as a bit flag and is defined as follows:
 
 When the property was omitted for a `language` object, value `0` (fully localized) is applied.
 
-*Rationale: Though we are considering this enumeration as bit filed, value 0 was choosen to represent a fully translated mod, too because in most programming languages value `0` is default for enums. Thus the spec allows to omitt the property.*  
+*Rationale: Though we are considering this enumeration as bit filed, value 0 was choosen to represent a fully translated mod, too because in most programming languages value `0` is default for enums. Thus the spec allows to omitt the property for fully localized langues like English.*  
 
 ---
 
