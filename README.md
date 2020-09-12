@@ -25,6 +25,7 @@ The following sections specify the required and optional content for `eaw.modinf
   - `version` property now only supports 3 digits.
   - `steamdata.visibility` values are changed.
 
+
 ## Filename
 
 The meta information must be saved to a `JSON` file. There are two ways for naming the file:
