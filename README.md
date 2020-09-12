@@ -303,7 +303,7 @@ The language support enumeration acts as a bit flag and is defined as follows:
 
 When the property was omitted for a `language` object, value `0` (fully localized) is applied.
 
-*Rationale: Though we are considering this enumeration as bit filed, value 0 was choosen to represent a fully translated mod, too because in most programming languages value `0` is default for enums. Thus the spec allows to omitt the property for fully localized langues like English.*  
+*Rationale: Though we are considering this enumeration as bit field, value 0 was choosen to represent a fully translated mod, because in most programming languages the value `0` is default for enums. Thus the spec allows to omitt the property for fully localized langues like English.*  
 
 ---
 
