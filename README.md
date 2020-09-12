@@ -24,6 +24,7 @@ The following sections specify the required and optional content for `eaw.modinf
   - Added support to express language support.
   - `version` property now only supports 3 digits.
   - `steamdata.visibility` values are changed.
+  - `custom` was changed from Array to dictionay.
 
 ## Filename
 
