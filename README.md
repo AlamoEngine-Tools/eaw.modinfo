@@ -75,7 +75,8 @@ If there are only variant files they each act as a main files on their own.
   },
   "custom": [
     {
-      "my_custom_key": "My important additional value."
+      "key": "your_unique_key",
+      "value" : { }
     }
   ]
 }
@@ -184,9 +185,9 @@ The container is either absent from the `modinfo.json` or it is fully required.
 
 **Level:** *OPTIONAL*
 
-**Data Type**: `Object[]`
+**Data Type**: `Dictionay<string, object>`
 
-**Data Semantics**: A list of anything
+**Data Semantics**: Collection of custom objects, stored by keys
 
 **Description:**
 
