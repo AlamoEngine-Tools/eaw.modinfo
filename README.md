@@ -20,7 +20,9 @@ The following sections specify the required and optional content for `eaw.modinf
 
 ## Notable Changes
 
-- *v2.1:* Added support to express language support.
+- *v2.1:* 
+  - Added support to express language support.
+  - `version` property now only supports 3 digits.
 
 ## Filename
 
@@ -55,7 +57,7 @@ If there are only variant files they each act as a main files on their own.
   "name": "The mod's name",
   "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
   "icon": "relative/or/absolute/path/to/icon.ico",
-  "version": "1.0.0.0",
+  "version": "1.0.0",
   "dependencies": [
     {
 	  "modtype": 0,
@@ -146,11 +148,13 @@ The path to the mod's icon file **relative** to the mod's root directory or an *
 
 **Data Type**: `String`  
 
-**Data Semantics**: 4 Digit Semantic Version 
+**Data Semantics**: 3 Digit Semantic Version 
 
 **Description:**
 
-The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/) that also supports a fourth digits for build increments, etc. and suffixes (e.g. `"-rc1"`).
+The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/).
+
+*Examples: `"1.0.0"`, `"1.0.0-rc1"`, `"1.2.3-ALPHA-1"`*
 
 ### The `"dependencies"` Property
 

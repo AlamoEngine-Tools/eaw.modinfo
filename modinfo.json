@@ -2,7 +2,7 @@
   "name": "The mod's name",
   "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
   "icon": "relative/or/absolute/path/to/icon.ico",
-  "version": "1.0.0.0",
+  "version": "1.0.0",
   "dependencies": [
     {
 	  "modtype": 0,
