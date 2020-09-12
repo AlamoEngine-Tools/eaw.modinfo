@@ -1,26 +1,21 @@
-# eaw.modinfo Definition - v2.1
+# eaw.modinfo Definition - v2.0
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.1.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.0.
 
 ## Contents of the Specification:
-1. [Changes](#notable-changes)
-2. [Allowed File Names](#filename)
-3. [File Position](#file-position)
-4. [Exemplary Content](#exemplary-content)
-5. [`modinfo` Type Specification](#the-modinfo-type)
-6. [`modreference` Type Specification](#the-modreference-type)
-7. [`language` Type Specification](#the-language-type)
-8. [`steamdata` Type Specification](#the-steamdata-type)
-9. [Dependency Resolving](#dependency-resolving)
-10. [Dendepency Test Cases](#dependency-resolving-test-cases)
-
-## Notable Changes
-
-- *v2.1:* Added support to express language support.
+1. [Allowed File Names](#filename)
+2. [File Position](#file-position)
+3. [Exemplary Content](#exemplary-content)
+4. [`modinfo` Type Specification](#the-modinfo-type)
+5. [`modreference` Type Specification](#the-modreference-type)
+6. [`language` Type Specification](#the-language-type)
+7. [`steamdata` Type Specification](#the-steamdata-type)
+8. [Dependency Resolving](#dependency-resolving)
+9. [Dendepency Test Cases](#dependency-resolving-test-cases)
 
 ## Filename
 
