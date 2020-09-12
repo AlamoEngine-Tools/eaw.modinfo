@@ -41,7 +41,11 @@
   },
   "custom": [
     {
-      "my_custom_key": "My important additional value."
+      "key": "your_unique_key",
+      "value" : {
+        "the value": "can even",
+        "has": "some complex data"
+      }
     }
   ]
 }
