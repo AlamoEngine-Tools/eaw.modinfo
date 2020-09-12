@@ -343,13 +343,16 @@ The content folder's name as specified by the Steam Uploader.
 
 **Description:**
 
-The visibility enumeration:
+The visibility enumeration [(based on Steam API)](https://partner.steamgames.com/doc/api/ISteamRemoteStorage#ERemoteStoragePublishedFileVisibility):
 
 | Value | Meaning |
 |:--:|:--|
-|`0`|hidden|
+|`0`|public|
 |`1`|friends only|
-|`2`|public|
+|`2`|private|
+|`3`|unlisted|
+
+*Note: Value `3` (unlisted) currently is not documented by Valve and should thus not get used for now.*
 
 
 ### The `"steamdata.metadata"` Property
