@@ -2,7 +2,7 @@
   "name": "The mod's name",
   "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
   "icon": "relative/or/absolute/path/to/icon.ico",
-  "version": "1.0.0.0",
+  "version": "1.0.0",
   "dependencies": [
     {
 	  "modtype": 0,
@@ -12,6 +12,19 @@
 	  "modtype": 1,
 	  "identifier": "STEAMID"		
 	}	
+  ],
+  "languages": [
+    {
+      "code": "en"
+    },
+    {
+      "code": "de",
+      "support": 0
+    },
+    {
+      "code": "es",
+      "support": 1
+    }
   ],
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
@@ -28,7 +41,11 @@
   },
   "custom": [
     {
-      "my_custom_key": "My important additional value."
+      "key": "your_unique_key",
+      "value" : {
+        "the value": "can even",
+        "has": "some complex data"
+      }
     }
   ]
 }

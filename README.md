@@ -1,20 +1,30 @@
-# eaw.modinfo Definition - v2.0
+# eaw.modinfo Definition - v2.1
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.0.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.1.
 
 ## Contents of the Specification:
-1. [Allowed File Names](#filename)
-2. [File Position](#file-position)
-3. [Exemplary Content](#exemplary-content)
-4. [`modinfo` Type Specification](#the-modinfo-type)
-5. [`modreference` Type Specification](#the-modreference-type)
-6. [`steamdata` Type Specification](#the-steamdata-type)
-7. [Dependency Resolving](#dependency-resolving)
-8. [Dendepency Test Cases](#dependency-resolving-test-cases)
+1. [Changes](#notable-changes)
+2. [Allowed File Names](#filename)
+3. [File Position](#file-position)
+4. [Exemplary Content](#exemplary-content)
+5. [`modinfo` Type Specification](#the-modinfo-type)
+6. [`modreference` Type Specification](#the-modreference-type)
+7. [`language` Type Specification](#the-language-type)
+8. [`steamdata` Type Specification](#the-steamdata-type)
+9. [Dependency Resolving](#dependency-resolving)
+10. [Dendepency Test Cases](#dependency-resolving-test-cases)
+
+## Notable Changes
+
+- *v2.1:* 
+  - Added support to express language support.
+  - `version` property now only supports 3 digits.
+  - `steamdata.visibility` values are changed.
+  - `custom` was changed from Array to dictionay.
 
 ## Filename
 
@@ -49,7 +59,7 @@ If there are only variant files they each act as a main files on their own.
   "name": "The mod's name",
   "summary": "A short summary about the mod in Steam-flavoured BBCode.\nNice, eh?",
   "icon": "relative/or/absolute/path/to/icon.ico",
-  "version": "1.0.0.0",
+  "version": "1.0.0",
   "dependencies": [
     {
 	  "modtype": 0,
@@ -59,6 +69,19 @@ If there are only variant files they each act as a main files on their own.
 	  "modtype": 1,
 	  "identifier": "STEAMID"		
 	}	
+  ],
+  "languages": [
+    {
+      "code": "en"
+    },
+    {
+      "code": "de",
+      "support": 0
+    },
+    {
+      "code": "es",
+      "support": 1
+    }
   ],
   "steamdata": {
     "publishedfileid": "xxxxxxxxxx",
@@ -75,7 +98,8 @@ If there are only variant files they each act as a main files on their own.
   },
   "custom": [
     {
-      "my_custom_key": "My important additional value."
+      "key": "your_unique_key",
+      "value" : { }
     }
   ]
 }
@@ -127,11 +151,13 @@ The path to the mod's icon file **relative** to the mod's root directory or an *
 
 **Data Type**: `String`  
 
-**Data Semantics**: 4 Digit Semantic Version 
+**Data Semantics**: 3 Digit Semantic Version 
 
 **Description:**
 
-The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/) that also supports a fourth digits for build increments, etc. and suffixes (e.g. `"-rc1"`).
+The mod's version according to the extended semantic versioning: [Semantic Versioning](https://semver.org/).
+
+*Examples: `"1.0.0"`, `"1.0.0-rc1"`, `"1.2.3-ALPHA-1"`*
 
 ### The `"dependencies"` Property
 
@@ -166,12 +192,11 @@ A - D
   B
 ```
 
-
 ### The `"steamdata"` Property
 
 **Level:** *OPTIONAL*
 
-**Data Type**: [`steamdata`](#tthe-steamdata-type)  
+**Data Type**: [`steamdata`](#the-steamdata-type)  
 
 **Data Semantics**: Steam Workshops JSON
 
@@ -184,9 +209,9 @@ The container is either absent from the `modinfo.json` or it is fully required.
 
 **Level:** *OPTIONAL*
 
-**Data Type**: `Object[]`
+**Data Type**: `Dictionay<string, object>`
 
-**Data Semantics**: A list of anything
+**Data Semantics**: Collection of custom objects, stored by keys
 
 **Description:**
 
@@ -271,13 +296,16 @@ The content folder's name as specified by the Steam Uploader.
 
 **Description:**
 
-The visibility enumeration:
+The visibility enumeration [(based on Steam API)](https://partner.steamgames.com/doc/api/ISteamRemoteStorage#ERemoteStoragePublishedFileVisibility):
 
 | Value | Meaning |
 |:--:|:--|
-|`0`|hidden|
+|`0`|public|
 |`1`|friends only|
-|`2`|public|
+|`2`|private|
+|`3`|unlisted|
+
+*Note: Value `3` (unlisted) currently is not documented by Valve and should thus not get used for now.*
 
 
 ### The `"steamdata.metadata"` Property
