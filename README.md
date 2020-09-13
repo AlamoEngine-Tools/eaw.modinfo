@@ -191,6 +191,19 @@ A - D
  \
   B
 ```
+### The `"languages"` Property
+
+**Level:** *OPTIONAL*
+
+**Data Type**:  [`language`](#the-language-type)`[]`
+
+**Data Semantics**: Collection of supported languages
+
+**Description:**
+
+This property holds a collection of [`language`](#the-language-type) objects. Each item indicates a language that is supported by the mod. 
+
+The property is optional. When *NOT* present, the language **English** (`"en"`) is assumed to be default. However if the property is defined English *MUST* be inclued when supported by the mod, too.
 
 ### The `"steamdata"` Property
 
@@ -257,6 +270,46 @@ The modtype enumeration:
 **Description:**
 
 This property either contains an absolute or relative path of the parent mod or holds the STEAMID for workshop mods.
+
+---
+
+## The `"language"` Type
+
+#### The `"language.code"` Property
+
+**Level:** **REQUIRED**
+
+**Data Type**: `string`
+
+**Data Semantics**: Language Code
+
+**Description:**
+
+This property holds an [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) two letter language code.
+
+#### The `"language.support"` Property
+
+**Level:** *OPTIONAL*
+
+**Data Type**: Enum
+
+**Data Semantics**: Level of language support
+
+**Description:**
+
+The language support enumeration acts as a bit flag and is defined as follows:
+
+| Value | Meaning |
+|:--:|:--|
+|`0`| ***Default:*** Same as `7`. | 
+|`1`| **Text:** A `mastertextfile_xxx.dat` is available in this language.|
+|`2`|**Speech**: Speech event files are in their own language folder. (Important for Movies, Missions and Holograms)|
+|`4`|**SFX** Sound effects, such as unit actions, are localized. |
+|`7`|**Fully localized:** Combines `1`, `2`, `4`|
+
+When the property was omitted for a `language` object, value `0` (fully localized) is applied.
+
+*Rationale: Though we are considering this enumeration as bit field, value 0 was choosen to represent a fully translated mod, because in most programming languages the value `0` is default for enums. Thus the spec allows to omitt the property for fully localized langues like English.*  
 
 ---
 
