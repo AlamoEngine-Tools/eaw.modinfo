@@ -24,6 +24,7 @@ The following sections specify the required and optional content for `eaw.modinf
   - Added support to express language support.
   - `version` property now only supports 3 digits.
   - `steamdata.visibility` values are changed.
+  - `steamdata.metadata` property is optional.
   - `custom` was changed from Array to dictionay.
 
 ## Filename
@@ -216,7 +217,6 @@ The property is optional. When *NOT* present, the language **English** (`"en"`) 
 **Description:**
 
 The [`"steamdata type"`](#the-steamdata-type) container holds additional info that is required for the Steam Version of the game.
-The container is either absent from the `modinfo.json` or it is fully required.
 
 ### The `"custom"` Property
 
@@ -363,7 +363,7 @@ The visibility enumeration [(based on Steam API)](https://partner.steamgames.com
 
 ### The `"steamdata.metadata"` Property
 
-**Level:** **REQUIRED**
+**Level:** *OPTIONAL*
 
 **Data Type**: `String`
 
