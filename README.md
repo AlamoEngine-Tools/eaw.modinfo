@@ -25,7 +25,6 @@ The following sections specify the required and optional content for `eaw.modinf
   - `version` property now only supports 3 digits.
   - `steamdata.visibility` values are changed.
   - `steamdata.metadata` property is optional.
-  - `custom` was changed from Array to dictionay.
 
 ## Filename
 
@@ -99,8 +98,8 @@ If there are only variant files they each act as a main files on their own.
   },
   "custom": [
     {
-      "key": "your_unique_key",
-      "value" : { }
+      "key-1": "someData",
+      "key-2" : { } // Some Object
     }
   ]
 }
@@ -206,6 +205,8 @@ This property holds a collection of [`language`](#the-language-type) objects. Ea
 
 The property is optional. When *NOT* present, the language **English** (`"en"`) is assumed to be default. However if the property is defined English *MUST* be inclued when supported by the mod, too.
 
+*NOTE: If you are dealing with a situation where you have a variant modinfo file that shall get merged with a main modinfo file, the variant MUST explicitly set this property as well.* 
+
 ### The `"steamdata"` Property
 
 **Level:** *OPTIONAL*
@@ -255,7 +256,7 @@ The modtype enumeration:
 
 *Rationale: The current mod does NOT contain a `modtype` property because the mod should not have to know it's own type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design coice was made because mod linking should always be considered for Steam Workshop mods. The possibility to reference local mods is a convenience functionality intended to be used by mod developers for test setups and development.*
 
-*Because a workshop mod in theroy also is the `default` mod type the numeric enumeration values are choosen the way they are.*
+~~*Because a workshop mod in theroy also is the `default` mod type the numeric enumeration values are choosen the way they are.*~~
 
 `2 : Virtual Mod Types`. A virtual mod does not exists on disk but is only a logical container that holds dependency information. This is currently not supported and only acts as a placeholder in this version of the specification. 
 
@@ -291,7 +292,7 @@ This property holds an [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639
 
 **Level:** *OPTIONAL*
 
-**Data Type**: Enum
+**Data Type**: Integer
 
 **Data Semantics**: Level of language support
 
@@ -301,15 +302,12 @@ The language support enumeration acts as a bit flag and is defined as follows:
 
 | Value | Meaning |
 |:--:|:--|
-|`0`| ***Default:*** Same as `7`. | 
 |`1`| **Text:** A `mastertextfile_xxx.dat` is available in this language.|
 |`2`|**Speech**: Speech event files are in their own language folder. (Important for Movies, Missions and Holograms)|
 |`4`|**SFX** Sound effects, such as unit actions, are localized. |
 |`7`|**Fully localized:** Combines `1`, `2`, `4`|
 
-When the property was omitted for a `language` object, value `0` (fully localized) is applied.
-
-*Rationale: Though we are considering this enumeration as bit field, value 0 was choosen to represent a fully translated mod, because in most programming languages the value `0` is default for enums. Thus the spec allows to omitt the property for fully localized langues like English.*  
+When the property was omitted for a `language` object, value `7` (fully localized) is applied.
 
 ---
 

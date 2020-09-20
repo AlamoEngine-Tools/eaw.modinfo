@@ -41,10 +41,9 @@
   },
   "custom": [
     {
-      "key": "your_unique_key",
-      "value" : {
-        "the value": "can even",
-        "has": "some complex data"
+      "key": "data",
+      "key2": {
+        "some-prop":"some-value"
       }
     }
   ]
