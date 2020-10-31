@@ -21,7 +21,7 @@ The following sections specify the required and optional content for `eaw.modinf
 ## Notable Changes
 
 ### Leged: 
-**Bold text are breaking changes.**
+**Bold text indicates breaking changes.**
 
 Breaking changes are any modifications that break backwards compatibility. This usualy is the case when:
 - renaming properties
