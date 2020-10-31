@@ -1,10 +1,10 @@
-# eaw.modinfo Definition - v2.1.1
+# eaw.modinfo Definition - v2.2
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.1.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.2.
 
 ## Contents of the Specification:
 1. [Changes](#notable-changes)
@@ -41,7 +41,7 @@ Not a breaking change are modifications like:
   - **`version` property now only supports 3 digits.**
   - **`steamdata.visibility` values are changed.**
   - `steamdata.metadata` property is optional.
-- *v2.1.1:*
+- *v2.2:*
   - Re-added `steamdata.description` as optional value
   - Re-added `steamdata.previewfile` as optional value
 
