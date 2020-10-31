@@ -37,7 +37,9 @@
       "Space",
       "FOC",
       "Singleplayer"
-    ]
+    ],
+    "description": "Description goes here",
+    "previewfile": "my\\path\\splash.jpg"
   },
   "custom": [
     {
