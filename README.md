@@ -42,6 +42,7 @@ Not a breaking change are modifications like:
   - **`steamdata.visibility` values are changed.**
   - `steamdata.metadata` property is optional.
 - *v2.2:*
+  - **Re-added `steamdata.title` as required value**
   - Re-added `steamdata.description` as optional value
   - Re-added `steamdata.previewfile` as optional value
 
@@ -106,6 +107,7 @@ If there are only variant files they each act as a main files on their own.
     "publishedfileid": "xxxxxxxxxx",
     "contentfolder": "folder",
     "visibility": 1,
+    "title": "Your Mod Name",
     "metadata": "",
     "tags":[
       "Multiplayer",
@@ -115,7 +117,7 @@ If there are only variant files they each act as a main files on their own.
       "Singleplayer"
     ],
     "previewfile": "my\\path\\splash.png",
-    "description": "Some Description Test",
+    "description": "Some Description Test"
   },
   "custom": [
     {
@@ -379,6 +381,18 @@ The visibility enumeration [(based on Steam API)](https://partner.steamgames.com
 
 *Note: Value `3` (unlisted) currently is not documented by Valve and should thus not get used for now.*
 
+### The `"steamdata.title"` Property
+
+**Level:** **REQUIRED**
+
+**Data Type**: `string`
+
+**Data Semantics**: Soft identifier
+
+**Description:**
+
+The display name of the mod in Steam Workshops.
+
 
 ### The `"steamdata.metadata"` Property
 
@@ -391,6 +405,8 @@ The visibility enumeration [(based on Steam API)](https://partner.steamgames.com
 **Description:**
 
 Arbitrary metadata as string.
+
+*Implementation Notes: Even if this value is not present, tools should print this property with empty value `""` in the file. This behaviour is recommended to increase compatiblity with the Steam Worshops uploader.*
 
 ### The `"steamdata.tags"` Property
 
@@ -419,6 +435,8 @@ At least either `EAW` or `FOC` is required to determine the game the mod shows u
 
 Optional description of the Mod in Steam flavoured BB-Code.
 
+*Implementation Notes: Even if this value is not present, tools should print this property with empty value `""` in the file. This behaviour is recommended to increase compatiblity with the Steam Worshops uploader.*
+
 
 ### The `"steamdata.previewfile"` Property
 
@@ -431,6 +449,8 @@ Optional description of the Mod in Steam flavoured BB-Code.
 **Description:**
 
 Relative path to an image file which holds the preview image
+
+*Implementation Notes: Even if this value is not present, tools should print this property with empty value `""` in the file. This behaviour is recommended to increase compatiblity with the Steam Worshops uploader.*
 
 
 ## Dependency Resolving
