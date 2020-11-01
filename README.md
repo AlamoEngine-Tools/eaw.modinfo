@@ -1,10 +1,10 @@
-# eaw.modinfo Definition - v2.1
+# eaw.modinfo Definition - v2.2
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.1.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.2.
 
 ## Contents of the Specification:
 1. [Changes](#notable-changes)
@@ -20,11 +20,30 @@ The following sections specify the required and optional content for `eaw.modinf
 
 ## Notable Changes
 
+### Leged: 
+**Bold text indicates breaking changes.**
+
+Breaking changes are any modifications that break backwards compatibility. This usualy is the case when:
+- renaming properties
+- removing properties
+- adding required properties
+- adding restrictions to a property value
+- changing data types
+- re-assigning constant values
+
+Not a breaking change are modifications like:
+- adding an optional property
+
+### Version History: 
+
 - *v2.1:* 
   - Added support to express language support.
-  - `version` property now only supports 3 digits.
-  - `steamdata.visibility` values are changed.
+  - **`version` property now only supports 3 digits.**
+  - **`steamdata.visibility` values are changed.**
   - `steamdata.metadata` property is optional.
+- *v2.2:*
+  - Re-added `steamdata.description` as optional value
+  - Re-added `steamdata.previewfile` as optional value
 
 ## Filename
 
@@ -94,7 +113,9 @@ If there are only variant files they each act as a main files on their own.
       "Space",
       "FOC",
       "Singleplayer"
-    ]
+    ],
+    "previewfile": "my\\path\\splash.png",
+    "description": "Some Description Test",
   },
   "custom": [
     {
@@ -384,6 +405,33 @@ Arbitrary metadata as string.
 Steam Tags as specified by the Steam Uploader.
 
 At least either `EAW` or `FOC` is required to determine the game the mod shows up for.
+
+
+### The `"steamdata.description"` Property
+
+**Level:** *OPTIONAL*
+
+**Data Type**: `String`
+
+**Data Semantics**: Steam flavoured BB-Code description 
+
+**Description:**
+
+Optional description of the Mod in Steam flavoured BB-Code.
+
+
+### The `"steamdata.previewfile"` Property
+
+**Level:** *OPTIONAL*
+
+**Data Type**: `String`
+
+**Data Semantics**: Relative Path
+
+**Description:**
+
+Relative path to an image file which holds the preview image
+
 
 ## Dependency Resolving
 The game supports chaining (could also be called *overriding* or *linked*) mods by queuing up the command line arguments `STEAMMOD` and/or `MODPATH`. 
