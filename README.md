@@ -45,6 +45,8 @@ Not a breaking change are modifications like:
   - **Re-added `steamdata.title` as required value**
   - Re-added `steamdata.description` as optional value
   - Re-added `steamdata.previewfile` as optional value
+- *v2.2.1:*
+  - Added equality information for modinfo and `modreference`
 
 ## Filename
 
@@ -129,6 +131,35 @@ If there are only variant files they each act as a main files on their own.
 ```
 
 ## The `"modinfo"` Type
+
+The `modinfo` type contains data which define a mod or enrich the mod's metadata information. The following sections describe the properties which can be expressed by this specification.
+
+To make a modinfo capable of defining or identifying mods, some properties must be treated in a special way. These properties are:
+- **`name`**
+- **`version`**
+- **`dependencies`**
+
+These properties define a logical construct which is called **`ModIdentity`**. Every modinfo file automatically defines the `ModIdentity` of it's mod.
+
+#### ModIdentity and Equality
+
+A mod identity can be used to fully qualify a mod definition. To compare the identity of two mods the three previously mentioned properties can be used.
+The specification defines two common strategies how to use these properties for identity checking:
+
+
+An Implementation of this specification must provide an identity checking where:
+- `name` AND `version` AND `dependencies` are considered.
+  - The `name` comparison shall be case-sensitive.
+  - The `version` comparison shall return "equals" when both version properties are not present OR both properties are present and their value is equal
+  - The `dependencies` comparison shall return "equals" when both dependency lists have the exact same number of element AND all elements match in value and position. [See ModReference equality](#ModReference-Equality).
+- Only `name` is considered.
+
+The first strategy is considered to be de *default* identity checking strategy.
+
+*Implementation Notes: It's up to an implementation of this specification to add more possible strategies.*
+
+
+
 
 ### The `"name"` Property
 
@@ -258,6 +289,21 @@ The `custom` property allows arbitrary extensions to the format. Programs implem
 ---
 
 ## The `"modreference"` Type
+
+### ModReference vs. ModIdentity
+
+A `ModReference` distinguished by other properties than a `ModIdentity` in order to use it for dependency resolving. 
+
+*Example: A mod `A` may have multiple mod references e.g. one is located in Steam-Workshops and the other in `FoC/Mods/A/`. Both references point to the same `ModIdentity` (Name: A, Version: null, Dependencies:Empty) however the references itself are not equal.*
+
+### ModReference Equality
+
+Two ModReferences equal when both properties `identifier` and `modtype` match. The `identifier` property is case-sensitive.
+This strategy has to get applied when resolving dependencies.
+
+*Implementation Notes: It's up to an implementation of this specification to add more possible strategies.*
+
+### Properties
 
 #### The `"modreference.modtype"` Property
 
