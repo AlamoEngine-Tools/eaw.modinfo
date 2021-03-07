@@ -96,7 +96,7 @@ If there are only variant files they each act as a main files on their own.
     },
     {
       "code": "de",
-      "support": 0
+      "support": 1
     },
     {
       "code": "es",
