@@ -1,10 +1,10 @@
-# eaw.modinfo Definition - v2.2
+# eaw.modinfo Definition - v2.2.1
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.2.
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.2.1.
 
 ## Contents of the Specification:
 1. [Changes](#notable-changes)
