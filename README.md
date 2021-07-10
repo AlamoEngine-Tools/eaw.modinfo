@@ -7,11 +7,45 @@ The info files defined herein allow mod makers and tool makers to specify meta i
 The following sections specify the required and optional content for `eaw.modinfo` in Version 2.3
 
 ## Contents of the Specification:
-- [Changes](#notable-changes)
+[Changes](#notable-changes)
+
+**Partition I**
 - [I. Mods](#i-mods)
+  - [I.1 Representing Mods](#i1-representing-mods)
+    - [I.1.1 ModIdentity](#i11-modidentity)
+    - [I.1.2 ModInfo](#i12-modinfo)
+    - [I.1.3 ModReference](#i13-modreference)
+  - [I.2 Physical Mods](#i2-physical-mods)
+  - [I.3 Runtime-Mods](#i3-runtime-mods)
+  
+**Partition II**
 - [II. Modinfo JSON File](#ii-modinfo-json-file)
+  - [II.1 Filename](#ii1-filename)
+  - [II.2 File Position](#ii2-file-position)
+  - [II.3 Exemplary Content](#ii3-exemplary-content)
+
+**Partition III**
 - [III. Data Structures](#iii-data-structure-definitions)
+  - [III.1 The "modidentity" Type](#iii1-the-modidentity-type)
+    - [III.1.1 ModIdentity and Equality](#iii11-modidentity-and-equality)
+    - [III.1.2 Properties](#iii12-properties)
+  - [III.2 The "modreference" Type](#iii2-the-modreference-type)
+    - [III.2.1 ModReference vs. ModIdentity](#iii21-modreference-vs-modidentity)
+    - [III.2.3 Properties](#iii23-properties)
+  - [III.3 The "modinfo" Type](#iii3-the-modinfo-type)
+    - [III.3.1 Properties](#iii31-properties)
+  - [III.4 The "languageInfo" Type](#iii4-the-languageinfo-type)
+    - [III.4.1 Properties](#iii41-properties)
+  - [III.5 The "steamdata" Type](#iii5-the-steamdata-type)
+    - [III.5.1 Properties](#iii51-properties)
+
+**Partition IV**
 - [IV Mod Dependency Handling](#iv-mod-dependency-handling)
+  - [IV.1 Dependency Resolving Algorithm](#iv1-dependency-resolving-algorithm)
+    - [IV.1.1 Resolving ResolveRecursive](#iv11-resolving-resolverecursive)
+    - [IV.1.2 Resolving ResolveLastItem](#iv12-resolving-resolvelastitem)
+    - [IV.1.3 Resolving FullResolved](#iv13-resolving-fullresolved)
+  - [IV.2 Full Recursive Dependency Resolving Test Cases](#iv2-full-recursive-dependency-resolving-test-cases)
 
 ## Notable Changes
 
@@ -148,7 +182,7 @@ Option `2` can be used if you want to create different variants of a mod that sh
 
 The target directory is the top level of the mod's folder (next to where the mod's `data` folder is).
 
-It may contain none, one or multiple files, as described in [Filename](#filename).
+It may contain none, one or multiple files, as described in [Filename](#ii1-filename).
 
 If there exists at least one variant file AND a main file the content from the main file gets merged into the variant file(-s) unless the variant overrides a property.  
 
@@ -238,7 +272,7 @@ An Implementation of this specification must provide an identity checking where:
 - `name` AND `version` AND `dependencies` are considered.
   - The `name` comparison shall be case-sensitive.
   - The `version` comparison shall return "equals" when both version properties are not present OR both properties are present and their value is equal
-  - The `dependencies` comparison shall return "equals" when both dependency lists ([See ModReference equality](#ModReference-Equality)):
+  - The `dependencies` comparison shall return "equals" when both dependency lists ([See ModReference equality](#iii22-modreference-equality)):
     - have the same `resolve-layout` property,
     - have the exact same number of elements,
     - all elements match in value and position.
@@ -283,7 +317,7 @@ The mod's version according to the extended semantic versioning: [Semantic Versi
 
 **Level:** *OPTIONAL*
 
-**Data Type**: [`dependencyList`](#)
+**Data Type**: `dependencyList`
 
 **Data Semantics**: Ordered List of Objects 
 
@@ -303,8 +337,8 @@ The JSON allows to specify the desired resolve layout by adding its name as a `s
 
 ```json
 {
-  "name": "MyMod"
-  "dependencies": 
+  "name": "MyMod",
+  "dependencies":
   [
     "FullResolved", 
     {
@@ -435,13 +469,13 @@ The path to the mod's icon file **relative** to the mod's root directory or an *
 
 **Level:** *OPTIONAL*
 
-**Data Type**:  [`languageInfo`](#the-languageinfo-type)`[]`
+**Data Type**:  [`languageInfo`](#iii4-the-languageinfo-type)`[]`
 
 **Data Semantics**: Collection of supported languages
 
 **Description:**
 
-This property holds a collection of [`language`](#the-language-type) objects. Each item indicates a language that is supported by the mod. 
+This property holds a collection of [`language`](#iii4-the-languageinfo-type) objects. Each item indicates a language that is supported by the mod. 
 
 The property is optional. When *NOT* present, the language **English** (`"en"`) is assumed to be default. However if the property is defined English *MUST* be included when supported by the mod, too.
 
@@ -451,13 +485,13 @@ The property is optional. When *NOT* present, the language **English** (`"en"`) 
 
 **Level:** *OPTIONAL*
 
-**Data Type**: [`steamdata`](#the-steamdata-type)  
+**Data Type**: [`steamdata`](#iii5-the-steamdata-type)  
 
 **Data Semantics**: Steam Workshops JSON
 
 **Description:**
 
-The [`"steamdata type"`](#the-steamdata-type) container holds additional info that is required for the Steam Version of the game.
+The [`"steamdata type"`](#iii5-the-steamdata-type) container holds additional info that is required for the Steam Version of the game.
 
 #### The `"custom"` Property
 
