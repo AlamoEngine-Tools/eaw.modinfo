@@ -28,6 +28,7 @@ Breaking changes are any modifications that break backwards compatibility. This 
 
 Not a breaking change are modifications like:
 - adding an optional property
+- adding an required property where default behavior is not inflicting the older version.
 
 ### Version History: 
 
@@ -59,9 +60,9 @@ For End-Users this specification is nearly invisible, though they might highly p
 ### Contributing and Augmenting this Specification
 For anyone who wished to alter the specification there are **3** important requirements each change must comply with:
 
-1. **Error Resistance**. In order for a mod to be playable this specification MUST stay optional. A mod must not demand to have any information described here or a certain tool in oder to work. This also means that any malformed, corrupted or broken data this specification provides MUST NOT lead to a situation where a mod cannot be played.
-2. **Usability impact for players**. Any new addition to this specification must provide a clear user story. Only if a Player (or a development team) benefits from additional features it shall get added to the specification. In any other case custom tools and applications shall define their own behavior. Also any changes to the specification MUST NOT alter the expected behavior from a player's point of view.
-4. **Mod Developer Acceptance** Avoid making changes which do require a mod developer to update their modinfo. Even if a change is considered to be a *breaking change* consider to specify a default behavior which stays backward compatible to the previous version of this specification. This way it can be ensured, this specification gets generally accepted and adapted by mod and tool developers.
+1. **Error Resistance**: In order for a mod to be playable this specification MUST stay optional. A mod must not demand to have any information described here or a certain tool in oder to work. This also means that any malformed, corrupted or broken data this specification provides MUST NOT lead to a situation where a mod cannot be played.
+2. **Usability impact for players**: Any new addition to this specification must provide a clear user story. Only if a Player (or a development team) benefits from additional features it shall get added to the specification. In any other case custom tools and applications shall define their own behavior. Also any changes to the specification MUST NOT alter the expected behavior from a player's point of view.
+4. **Mod Developer Acceptance**: Avoid making changes which do require a mod developer to update their modinfo. Even if a change is considered to be a *breaking change* consider to specify a default behavior which stays backward compatible to the previous version of this specification. This way it can be ensured, this specification gets generally accepted and adapted by mod and tool developers.
 
 ---
 
@@ -84,7 +85,7 @@ The next sections will explain these data (`ModIdentity`, `ModInfo` and `ModRefe
 ### I.1.1 ModIdentity
 The `ModIdentity` data provides *only* the necessary data to uniquely identify a mod. Two mods cannot share the same identity without being considered to be *the same mod*. This information explicitly does not tell anything about the *location* of the mod. This way, the same mod may be installed multiple times (at different locations) on the same machine. 
 
-See [ModIdentity Equality](#modidentity-and-equality) for detailed information when two ModIdentities are considered to be the same.
+See [ModIdentity Equality](#iii11-modidentity-and-equality) for detailed information when two ModIdentities are considered to be the same.
 
 Mod developers SHOULD ensure their mods have a globally unique ModIdentity.
 
@@ -366,6 +367,8 @@ The modtype enumeration:
 
 *Rationale: The current mod does NOT contain a `modtype` property because the mod should not have to know it's own type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design choice was made because mod linking should always be considered for Steam Workshop mods. The possibility to reference local mods is a convenience functionality intended to be used by mod developers for test setups and development.*
 
+*Note: Since virtual mods have an unstable/unpredictable identifier, they should not be used in an modinfo.json to avoid tool specific errors for the user. However this specification shall not forbid it.*
+
 
 #### The `"identifier"` Property
 
@@ -389,9 +392,11 @@ This property either contains an absolute or relative path of the parent mod or 
 
 **Description:**
 
-This property shall only get parsed and otherwise ignored completely by an implementation of this specification. It explicitly is not used for `modeference` equality matching and dependency resolution. It shall only be used to custom tools.
+This property shall only get parsed and otherwise ignored completely by an implementation of this specification. It explicitly is not used for `modreference` equality matching and dependency resolution. It shall only be used to custom tools.
 
-This property can be used for `modreferences` as mod dependency list entries. Custom tools might want to consume the set version range and perform a custom mod matching.
+This specification shares the same syntax and semantics as used for [npm node dependency ranges](https://github.com/npm/node-semver#ranges). If the property is unset, the version range `*` (which means `>= 0.0.0`) shall be used.
+
+*Rationale: This property can be used for entries in a mod's mod dependency list. Custom tools might want to consume the given version range and perform a custom mod matching.*
 
 ---
 
@@ -671,7 +676,7 @@ To guide an implementation, this specification defines the following [test cases
 ## IV.1.2 Resolving `ResolveLastItem`
 Only the last (or the only element) in the list shall be resolved as specified in [Resolving ResolveRecursive](#iv11-resolving-resolverecursive).
 
-As soon as there exists one duplicate, a dependency cycle is present.
+As soon as there exists a duplicate, a dependency cycle is present.
 
 ## IV.1.3 Resolving `FullResolved`
 Since this layout indicates the dependency list shall be interpreted *as is*, the flattening algorithm shall return the list unmodified. 
@@ -681,9 +686,9 @@ If the list contains a duplicate, a dependency cycle is present.
 
 ## IV.2 Full Recursive Dependency Resolving Test Cases
 
-Node `A` is always the mod that should be loaded. Every mod following after  `:` are direct dependencies of the mod, if multiple they are separated by a comma.
+Node `A` is always the mod that should be loaded. Every mod following after  `:` are direct dependencies of the mod, if multiple they are separated by a `,`.
 
-Each dependency list has the option `ResolveRecursive` set.
+Each dependency list has the option `ResolveRecursive` specified.
 
 **Test-Case A:**
 ```
