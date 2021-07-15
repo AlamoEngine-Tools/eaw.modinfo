@@ -4,14 +4,11 @@
   "icon": "relative/or/absolute/path/to/icon.ico",
   "version": "1.0.0",
   "dependencies": [
+    "FullResolved",
     {
-	  "modtype": 0,
-	  "identifier": "relative/or/absolute/path"		
-	},
-	{
-	  "modtype": 1,
-	  "identifier": "STEAMID"		
-	}	
+      "modtype": 1,
+      "identifier": "STEAMID"		
+    }
   ],
   "languages": [
     {
