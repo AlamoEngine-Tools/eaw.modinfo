@@ -1,10 +1,10 @@
-# eaw.modinfo Definition - v2.3
+# eaw.modinfo Definition - v2.3.1
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.3
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.3.1
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
@@ -66,6 +66,8 @@ Not a breaking change are modifications like:
 
 ### Version History: 
 
+-*v2.3.1*
+  - Added a requirement on virtual mods for the dependency resolve algorithm.
 - *v2.3*
   - The `dependencies` property was augmented to (optionally) support multiple kinds of resolve layouts. 
   - Added optional property `version-range` to `ModReference`
@@ -685,6 +687,9 @@ Each resolve layout implementations fullfil the following general requirements, 
 2. The resulting list contains the target mod. It shall be the first element of the list.
 2. The resulting list must not have duplicates.
 3. The implementation must be able to recognize and respond to identified dependency cycles accordingly.
+4. Virtual Mods must be preserved in the resulting list.
+
+*Rationale: While virtual mods cannot be represented by a command line, which means they are practically invisible, they still need to exist in the resulting list, so tools always have the most precise data to deal with. Removing virtual mods from the flattened result is a tool specific implementation detail.*
 
 
 *Note: Converting a (non-binary) tree structure to a flatteded and duplicate-free line is a one-way operation. It also looses accuracy. However, since in some cases multiple outcomes are possible, the resolve layout `ResolveRecursive` might lead to unexpected results. The requirements above are created to ensure consistency across multiple implementations.*
