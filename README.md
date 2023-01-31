@@ -1,10 +1,10 @@
-# eaw.modinfo Definition - v2.3.1
+# eaw.modinfo Definition - v2.3.2
 
 A standard definition for Star Wars: Empire at War mod info files.
 
 The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
 
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.3.1
+The following sections specify the required and optional content for `eaw.modinfo` in Version 2.3.2
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
@@ -20,9 +20,10 @@ The following sections specify the required and optional content for `eaw.modinf
   
 **Partition II**
 - [II. Modinfo JSON File](#ii-modinfo-json-file)
-  - [II.1 Filename](#ii1-filename)
-  - [II.2 File Position](#ii2-file-position)
-  - [II.3 Exemplary Content](#ii3-exemplary-content)
+  - [II.1 File Syntax](#ii1-file-syntax)
+  - [II.2 Filename](#ii2-filename)
+  - [II.3 File Position](#ii3-file-position)
+  - [II.4 Exemplary Content](#ii4-exemplary-content)
 
 **Partition III**
 - [III. Data Structures](#iii-data-structure-definitions)
@@ -66,6 +67,8 @@ Not a breaking change are modifications like:
 
 ### Version History: 
 
+-*v2.3.2*
+  - Allow trailling commas and JSON comments.
 -*v2.3.1*
   - Added a requirement on virtual mods for the dependency resolve algorithm.
 - *v2.3*
@@ -166,9 +169,17 @@ The combination of the virtual mod's name and its dependency list represent the 
 
 This partition describes the syntax of a `ModInfo` file, its file constraints and lookup mechanics.
 
-## II.1 Filename
+## II.1 File Syntax
 
-The meta information must be saved to a `JSON` file. There are two ways for naming the file:
+The meta information must be saved to a `JSON` file. To increase compatibility and to be less prone to errors it shall be explicitly allowed to...
+
+1. include inofficial JSON commentes. Supported shall be single-line ``// Comment`` and multi-line ``/* Comment */`` comments. It's up to for the tool implementor to decide whether to parse or ignore the comment's content. 
+2. have a trailling comma *'* charater after lists, values or objects.
+
+
+## II.2 Filename
+
+There are two ways for naming the file:
 
 1. The file is called `modinfo.json`. This is considered as the *main file*.
 2. The file is called `[Any_FS_compliant_letter]-modinfo.json`. This is considered as a *variant file.*
@@ -180,7 +191,7 @@ Option `2` can be used if you want to create different variants of a mod that sh
 
 *Implementation Notes: In practice this will instantiate a new mod for each variant available.*
 
-## II.2 File Position
+## II.3 File Position
 
 The target directory is the top level of the mod's folder (next to where the mod's `data` folder is).
 
@@ -192,7 +203,7 @@ If there are only variant files they each act as a main files on their own.
 
 *Implementation Notes: As soon as a mod folder contains modinfo variant files, only these should yield an instance of a mod. The main modinfo file (if existing) or just the directory itself should be ignored.*
 
-## II.3 Exemplary Content
+## II.4 Exemplary Content
 
 ```json
 {
