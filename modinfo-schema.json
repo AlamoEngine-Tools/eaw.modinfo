@@ -115,7 +115,7 @@
       "contains":{
         "$ref":"#/$defs/modref"
       },
-      "items":[
+      "prefixItems":[
         {
           "oneOf":[
             {
