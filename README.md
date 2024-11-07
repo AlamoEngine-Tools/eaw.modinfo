@@ -69,7 +69,7 @@ Not a breaking change are modifications like:
 *v3.0.0*
   - **Changed ID domain**
   - **Added versioning to JSON schema ID**
-  - **Fixes schema definition for mod dependency list**
+  - **Fixes schema definition for `dependencies`, `custom` and `languages`**
   - Added explicit merge behavior for `modinfo` data type.
   - `modinfo.languages` is now a set
   - `modinfo.name` cannot be null or an empty string.
@@ -379,7 +379,7 @@ In JSON, the desired resolve layout can be specified by adding its name as a `st
 }
 ```
 
-If no resolve layout is specified in the JSON, the value ResolveRecursive shall be used as the default.
+If no resolve layout is specified in the JSON, the value `ResolveRecursive` shall be used as the default.
 
 An explanation of the supported layouts is shown in the table below:
 
