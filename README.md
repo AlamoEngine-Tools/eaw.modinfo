@@ -1,10 +1,9 @@
-# eaw.modinfo Definition - v2.3.2
+# eaw.modinfo Definition - v3.0.0
+A standard format for Star Wars: Empire at War mod information files.
 
-A standard definition for Star Wars: Empire at War mod info files.
+These files enable mod creators and tool developers to specify metadata about a given Empire at War mod.
 
-The info files defined herein allow mod makers and tool makers to specify meta information about a given Empire at War mod.
-
-The following sections specify the required and optional content for `eaw.modinfo` in Version 2.3.2
+The sections below detail the required and optional content for eaw.modinfo in Version 3.0.0.
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
@@ -53,36 +52,54 @@ The following sections specify the required and optional content for `eaw.modinf
 #### Legend: 
 **Bold text indicates breaking changes.**
 
-Breaking changes are any modifications that break backwards compatibility. This usually is the case when:
-- renaming properties
-- removing properties
-- adding required properties
-- adding restrictions to a property value
-- changing data types
-- re-assigning constant values
+Breaking changes are any modifications that break backward compatibility. This usually occurs when:
+- Renaming properties
+- Removing properties
+- Adding required properties
+- Adding restrictions to a property value
+- Changing data types
+- Re-assigning constant values
 
 Not a breaking change are modifications like:
-- adding an optional property
-- adding an required property where default behavior is not inflicting the older version.
+- Adding an optional property
+- Adding a required property when default behavior is backward-compatible
 
 ### Version History: 
 
--*v2.3.2*
+*v3.0.0*
+  - **Changed ID domain**
+  - **Added versioning to JSON schema ID**
+  - **Fixes schema definition for `dependencies`, `custom` and `languages`**
+  - Added explicit merge behavior for `modinfo` data type.
+  - `modinfo.languages` is now a set
+  - `modinfo.name` cannot be null or an empty string.
+  - Added equality information for `languageInfo`
+  - Split schemas into multiple files for easier reuse
+  - `modreference.identifier` must not be null or empty
+  - `steamdata.tags` entries have a new specification and rules
+  - Changed intended behavior in `II.3` for mod instanciation from multiple variant files together with a main modinfo. 
+
+*v2.3.2*
   - Allow trailling commas and JSON comments.
--*v2.3.1*
+
+*v2.3.1*
   - Added a requirement on virtual mods for the dependency resolve algorithm.
-- *v2.3*
+
+*v2.3*
   - The `dependencies` property was augmented to (optionally) support multiple kinds of resolve layouts. 
   - Added optional property `version-range` to `ModReference`
   - Virtual mods are fully specified.
   - overall specification improvements and restructuring.
-- *v2.2.1:*
+
+*v2.2.1:*
   - Added equality information for modinfo and `ModReference`
-- *v2.2:*
+
+*v2.2:*
   - **Re-added `steamdata.title` as required value**
   - Re-added `steamdata.description` as optional value
   - Re-added `steamdata.previewfile` as optional value
-- *v2.1:* 
+
+*v2.1:* 
   - Added support to express language support.
   - **`version` property now only supports 3 digits.**
   - **`steamdata.visibility` values are changed.**
@@ -90,118 +107,119 @@ Not a breaking change are modifications like:
 
 ## Goals of this Specification
 
-This specification introduces and defines a data model how to represent modifications, for now on called *Mods*, for the games *Star Wars: Empire at War* and *Star Wars: Empire at War: Forces of Corruption*. This data model shall provide necessary and optional metadata information for 3rd-party tools and applications to work with mods.
+This specification introduces and defines a data model to represent modifications, hereafter referred to as Mods, for the games Star Wars: Empire at War and Star Wars: Empire at War: Forces of Corruption. This data model provides necessary and optional metadata information that third-party tools and applications can use to work with mods.
 
-This specification is written for Mod Developers, who which to add such metadata to their products.
+This specification is intended for Mod Developers who wish to add such metadata to their products.
 
-For End-Users this specification is nearly invisible, though they might highly profit from it, if a mod integrated the metadata information. 
+For End-Users, this specification is nearly invisible, although they may benefit greatly if a mod includes this metadata.
 
 ### Contributing and Augmenting this Specification
-For anyone who wished to alter the specification there are **3** important requirements each change must comply with:
+For anyone wishing to alter the specification, there are 3 important requirements each change must meet:
 
-1. **Error Resistance**: In order for a mod to be playable this specification MUST stay optional. A mod must not demand to have any information described here or a certain tool in oder to work. This also means that any malformed, corrupted or broken data this specification provides MUST NOT lead to a situation where a mod cannot be played.
-2. **Usability impact for players**: Any new addition to this specification must provide a clear user story. Only if a Player (or a development team) benefits from additional features it shall get added to the specification. In any other case custom tools and applications shall define their own behavior. Also any changes to the specification MUST NOT alter the expected behavior from a player's point of view.
-4. **Mod Developer Acceptance**: Avoid making changes which do require a mod developer to update their modinfo. Even if a change is considered to be a *breaking change* consider to specify a default behavior which stays backward compatible to the previous version of this specification. This way it can be ensured, this specification gets generally accepted and adapted by mod and tool developers.
-
+1. **Error Resilience**: In order for a mod to remain playable, this specification MUST stay optional. A mod must not require any of the information described here or any specific tool to work. Additionally, any malformed, corrupted, or broken data provided by this specification MUST NOT lead to a situation where a mod cannot be played.
+2. **layer Usability Impact**: Any addition to this specification must provide a clear benefit to the player experience. Only if players (or a development team) benefit from added features should it be incorporated. In any other case, custom tools and applications should define their own behavior. Moreover, any changes to the specification MUST NOT alter the expected behavior from the player’s perspective.
+4. **Mod Developer Acceptance**: Avoid changes that require a mod developer to update their modinfo. Even if a change is considered a breaking change, consider defining a default behavior that remains backward-compatible with the previous version of this specification. This approach ensures broad acceptance and adoption by mod and tool developers.
 ---
 
 # I Mods
 
-A mod is an addition to the game which can be loaded by explicit user request to alter the game's mechanics, units, visuals, media, etc.  
+A mod is an addition to the game that a user can load to modify the game’s mechanics, units, visuals, media, etc.
 
-Traditionally a mod was just a collection of file which represented an installed mod. However due to the addition of the game to the Steam platform, as well as other platforms, and the discovery of *linked mods* this plain file collection representation is not descriptive enough any more. 
+Traditionally, a mod was simply a collection of files representing an installed mod. However, with the addition of the game to platforms such as Steam, along with the introduction of linked mods, this plain file collection representation is no longer sufficient.
 
-The same mod may be installed multiple time on a user machine but on different locations. For mod developers versioning also often becomes relevant. Also mods don't require to have their whole file base bundled into one package, but they can be split into multiple mods. For proper tool support it is necessary a mod can be represented in a structured and sufficient way.
+The same mod may be installed multiple times on a user’s machine in different locations. Versioning has also become relevant for mod developers. Furthermore, mods do not need to bundle all files into one package; they can be split across multiple mods. For proper tool support, a mod must be represented in a structured and comprehensive way.
 
 ## I.1 Representing Mods
 
-The following image illustrates the relationships of the data structures defined by this specification. As shown, there is a concrete mod installation called *MyMod* with the given attributes. *MyMod* references a *Modinfo File*. This modinfo file provides the information *Name*, *Version* and *Dependencies*. Both, the mod instance and the `ModInfo`, are an instance of the `ModIdentity` data. The mod instance's properties `Type`, `Identifier`, `Location` are defined by the mod itself. A `ModReference` instance may act as a pointer to the concrete instance by sharing the values of the mod's properties `Type`, and `Identifier`.
+The following diagram illustrates the relationships between the data structures defined in this specification. As shown, there is a specific mod installation called *MyMod* with the listed attributes. *MyMod* references a *Modinfo File*, which provides information on *Name*, *Version* and *Dependencies*. BBoth the mod instance and the `ModInfo`, are an instance of the `ModIdentity` data. The mod instance's properties `Type`, `Identifier`, `Location` are defined by the mod itself. A `ModReference` instance may act as a pointer to the concrete instance by sharing the values of the mod's properties `Type`, and `Identifier`.
 The next sections will explain these data (`ModIdentity`, `ModInfo` and `ModReference`) in more detail. 
 ![Mod Data Structure Relationship Diagram](/img/relationship.png)
 
-*Implementation Detail: A concrete Mod instance can also derive from `ModReference`. In this case it would mean the instance points to itself.*
+*Implementation Detail: In cases where a concrete mod instance derives from `ModReference`, the instance essentially self-references.*
 
 ### I.1.1 ModIdentity
-The `ModIdentity` data provides *only* the necessary data to uniquely identify a mod. Two mods cannot share the same identity without being considered to be *the same mod*. This information explicitly does not tell anything about the *location* of the mod. This way, the same mod may be installed multiple times (at different locations) on the same machine. 
+The `ModIdentity` data provides *only* the necessary data to uniquely identify a mod.  Two mods cannot share the same identity without being considered the same mod. This information explicitly does not indicate the location of the mod, so the same mod may be installed multiple times (in different locations) on the same machine.
 
 See [ModIdentity Equality](#iii11-modidentity-and-equality) for detailed information when two ModIdentities are considered to be the same.
 
 Mod developers SHOULD ensure their mods have a globally unique ModIdentity.
 
-*Rationale: Because this specification itself is optional, it shall not force the `ModIdentity` to be globally unique. Meaning that, if there are mods available, which inconveniently share e.g. the same Name, they might end up having the same ModIdentity.*
+> *Rationale: Since this specification itself is optional, it does not mandate `ModIdentity` to be globally unique. Therefore, if mods inadvertently share the same Name, they may end up with the same ModIdentity.*
 
-*Implementation Note: Because of the rationale, an implementation of the specification MUST ensure two different instances of the same ModIdentity can be distinguished. The `ModReference` provides the means to accomplish this.*
+> *Implementation Note: Due to the above rationale, an implementation of this specification MUST distinguish between two different instances with the same ModIdentity. `ModReference` provides the means to achieve this.*
 
 ### I.1.2 ModInfo
 
-A `ModInfo` data is an instance of `ModIdentity`. Additionally it may provide metadata for a mod, which help tools and applications to handle mod instances or provide additional features to users and mod developers. [See partition III](#iii-data-structure-definitions) which pre-defined properties a ModInfo may have and how they shall behave. 
+A `ModInfo` is an instance of `ModIdentity` and may provide additional metadata to help tools and applications handle mod instances or provide extra features for users and mod developers. [See partition III](#iii-data-structure-definitions) for predefined properties of `ModInfo` and their expected behavior.
 
 [Partition II](#ii-modinfo-json-file) describes the concrete JSON syntax of a modinfo and which rules apply when using a ModInfo for mod instances.
 
-A ModInfo is an optional data for a mod instance.
+Including a ModInfo is optional for a mod instance.
 
-*Implementation Note: Even if no ModInfo is explicitly provided to a mod instance, an implementation of this specification MUST ensure this mod instance still provides ModIdentity data*
+> *Implementation Note: Even if no ModInfo is explicitly provided to a mod instance, implementation of this specification MUST ensure that this mod instance still provides `ModIdentity` data.*
 
 ### I.1.3 ModReference
 
-A `ModReference` is pointer to an existing mod instance. It only contains the minimal information to describe where the instance can be found. 
+`ModReference` is a pointer to an existing mod instance and contains only the minimal information required to locate the instance.
 
-*Rationale: This type was introduces because tools can work on the reference while not really processing the mod instance, would could lead to significant performance improvements. Also this way it was possible to represent mod dependencies without bloating the JSON file and keeping effort as low as possible for mod developers. Generally a `ModReference` can be thought of a pointer as known from C/C++.*
+> *Rationale: This type was introduced to allow tools to work with a reference rather than a full mod instance, potentially leading to performance improvements. Additionally, it enables mod dependencies to be represented without bloating the JSON file, simplifying the effort for mod developers. Generally, `ModReference` functions similarly to a pointer in C/C++.*
 
 ## I.2 Physical Mods
 
-Physical mods exists on the file system and provide assets to alter the game. They can be played standalone or can be linked together into a set of virtual mods.
+Physical mods exist on the file system and provide assets to modify the game. They can be standalone or linked together into a set of virtual mods.
 
-Physical mods can be categorized by either being a Steam Workshop Mod, or not being one. In the latter case the mod is considered to be a *default* or *ordinary* mod.
+Physical mods can be categorized as either Steam Workshop Mods or non-Steam mods (default or ordinary mods).
 
 ## I.3 Runtime-Mods
 
-This specification also supports *Runtime Mods* or *Virtual Mods*. The key difference between a virtual mod and ordinary mod (e.g. a Steam Workshops Mod) is that a Virtual mod is not bound to an actual location on the file system. Virtual mods can be *composed* at a tool's runtime. Thus a *Modinfo* object shall also be able to exists only at runtime and must not be exclusively bound to a physical file. 
+This specification also supports Runtime Mods or Virtual Mods. Unlike ordinary mods (e.g., Steam Workshop Mods), a Virtual Mod is not bound to a specific location on the file system. Virtual mods can be composed at a tool’s runtime. As such, a Modinfo object may exist only at runtime and does not need to be exclusively bound to a physical file.
 
-Virtual Mods require a `name` and respectively an `identifier` for a `ModReference` instance and `dependency` list. A Virtual Mod's dependency list may contain physical mods (such as Steam Workshop Mods) or other Virtual Mods. 
-Because Virtual mods themselves do not contribute any physical assets for the game, each virtual mod must at least have one physical mod as a dependency.
+Virtual Mods require a `name` and respectively an `identifier` for a `ModReference` instance and `dependency` list. A Virtual Mod’s dependency list may contain physical mods (such as Steam Workshop Mods) or other Virtual Mods. Since Virtual Mods do not provide physical assets to the game, each Virtual Mod must have at least one physical mod as a dependency.
 
-The combination of the virtual mod's name and its dependency list represent the ModIdentity data for this instance.
+The combination of the virtual mod’s name and its dependency list constitutes the `ModIdentity` data for this instance.
 
 ---
 
-# II Modinfo JSON File
+# II. Modinfo JSON File
 
-This partition describes the syntax of a `ModInfo` file, its file constraints and lookup mechanics.
+This section describes the syntax of a `ModInfo` file, its file constraints, and lookup mechanics.
 
 ## II.1 File Syntax
 
-The meta information must be saved to a `JSON` file. To increase compatibility and to be less prone to errors it shall be explicitly allowed to...
+The metadata must be saved in a `JSON` file. To increase compatibility and reduce errors, the following allowances are made:
 
-1. include inofficial JSON commentes. Supported shall be single-line ``// Comment`` and multi-line ``/* Comment */`` comments. It's up to for the tool implementor to decide whether to parse or ignore the comment's content. 
-2. have a trailling comma *'* charater after lists, values or objects.
+1. It is permitted to include unofficial JSON comments. Supported formats are single-line `// Comment` and multi-line `/* Comment */` comments. Tool implementers may choose whether to parse or ignore the content of these comments.
+2. A trailing comma `,` is allowed after lists, values, or objects.
 
 
 ## II.2 Filename
 
-There are two ways for naming the file:
+There are two naming conventions for the file:
 
-1. The file is called `modinfo.json`. This is considered as the *main file*.
-2. The file is called `[Any_FS_compliant_letter]-modinfo.json`. This is considered as a *variant file.*
+1. **Main file:** Named `modinfo.json`.
+2. **Variant file:** Named `[Any_FS_compliant_name]-modinfo.json`.
 
+Option `2` can be used to create different variants of a mod that share the same files.
 
-Option `2` can be used if you want to create different variants of a mod that share the same files. 
+*Example: If your mod is a submod for two different base mods, this setup allows you to develop and upload the mod once, while targeting both base mods simultaneously.*
 
-*Imagine if your mod is a Submod for not only one but two different mods. This way you only need to develop and upload the mod once but it can target both base mods simultaneously.* 
-
-*Implementation Notes: In practice this will instantiate a new mod for each variant available.*
+ > *Implementation Note: In practice, this will instantiate a new mod for each variant available.*
 
 ## II.3 File Position
 
-The target directory is the top level of the mod's folder (next to where the mod's `data` folder is).
+The target directory is the top level of the mod's folder (where the mod's `data` folder is located).
 
-It may contain none, one or multiple files, as described in [Filename](#ii1-filename).
+It may contain no files, one file, or multiple files, as described in [Filename](#ii1-filename).
 
-If there exists at least one variant file AND a main file the content from the main file gets merged into the variant file(-s) unless the variant overrides a property.  
+If there is both a main file and at least one variant file, the main file’s content is merged into each variant file, unless the variant overrides a property.
 
-If there are only variant files they each act as a main files on their own. 
+Merging is described in [III.3.2](#iii32-merge-behavior).
 
-*Implementation Notes: As soon as a mod folder contains modinfo variant files, only these should yield an instance of a mod. The main modinfo file (if existing) or just the directory itself should be ignored.*
+If only variant files are present, each acts as a standalone main file.
+
+> *Implementation Note: Tools should return mod instances for both the main `modinfo.json` and variant files. This allows mod creators to support official sub-mods or variants. The `modinfo.json` defines the main mod, while the variant files define alternative configurations using the main mod as a dependency.*
+
+> *[Superseded by v3.0.0]* ~~*Implementation Note: If a mod folder contains variant files, only these should yield a mod instance. The main `modinfo.json` file (if it exists) or just the directory itself should be ignored.*~~
 
 ## II.4 Exemplary Content
 
@@ -261,38 +279,38 @@ If there are only variant files they each act as a main files on their own.
 
 ---
 
-# III Data Structure Definitions
+# III. Data Structure Definitions
 
-This partition defines the previously mentioned data types `ModIdentity`, `ModReference` and `ModIdentity` as well as their properties and other types which are introduced by this this specification.
+This section defines the `ModIdentity`, `ModReference`, and `ModInfo` data types, as well as their properties and other types introduced by this specification.
 
 ## III.1 The `"modidentity"` Type
 
-The `modidentity` type contains data which define a mod or enrich the mod's metadata information. The following sections describe the properties which can be expressed by this specification.
+The `modidentity` type contains data that defines a mod or enriches the mod's metadata. The following sections describe the properties that can be expressed within this specification.
 
-Therefore three properties are defined:
+The `modidentity` type defines three main properties:
 - **`name`**
 - **`version`**
 - **`dependencies`**
 
 ### III.1.1 ModIdentity and Equality
 
-A mod identity can be used to fully qualify a mod definition. To compare the identity of two mods the three previously mentioned properties can be used.
-The specification defines two common strategies how to use these properties for identity checking:
+A mod identity is used to fully qualify a mod definition. To compare the identities of two mods, these three properties can be used. The specification defines two standard strategies for using these properties to verify identity:
 
+Implementations of this specification must provide an identity check based on two different strategies:
 
-An Implementation of this specification must provide an identity checking where:
-- Only `name` is considered. Comparison shall be case-sensitive.
-- `name` AND `version` AND `dependencies` are considered.
-  - The `name` comparison shall be case-sensitive.
-  - The `version` comparison shall return "equals" when both version properties are not present OR both properties are present and their value is equal
-  - The `dependencies` comparison shall return "equals" when both dependency lists ([See ModReference equality](#iii22-modreference-equality)):
-    - have the same `resolve-layout` property,
-    - have the exact same number of elements,
-    - all elements match in value and position.
+1. Only the `name` is considered, with a case-sensitive comparison.
+2. The `name`, `version`, and `dependencies` are all considered:
+   - The `name` comparison is case-sensitive.
+   - The `version` comparison returns "equal" if both versions are either absent or both are present with the same value.
+   - The `dependencies` comparison returns "equal" if both dependency lists (see [ModReference Equality](#iii22-modreference-equality)):
+     - Have the same `resolve-layout` property,
+     - Contain the exact same number of elements,
+     - Have all elements matching in value and position.
 
-The latter strategy is considered to be de *default* identity checking strategy.
+The second strategy is the *default* identity-checking strategy.
 
-*Implementation Notes: It's up to an implementation of this specification to add more possible strategies. Runtime equality for different kinds of dependency lists could also be implemented.*
+> *Implementation Note: Implementations can add additional strategies if needed. Runtime equality for different kinds of dependency lists could also be implemented.*
+  
 
 ### III.1.2 Properties
 
@@ -306,9 +324,9 @@ The latter strategy is considered to be de *default* identity checking strategy.
 
 **Description:**
 
-This property specifies the fully qualified mod name, e.g. "Republic at War", "Thrawn's Revenge: Imperial Civil War", "Awakening of the Rebellion" or "Yuuzhan Vong at War".
+This property specifies the fully qualified mod name, e.g., "Republic at War," "Thrawn's Revenge: Imperial Civil War," "Awakening of the Rebellion," or "Yuuzhan Vong at War." The value cannot be null or an empty string.
 
-This property **must** also be present for variant modinfos that aim for overriding the main `modinfo.json`
+This property **must** also be present for variant modinfo files, even if they override all other properties from the main `modinfo.json`.
 
 #### The `"version"` Property
 
@@ -324,7 +342,7 @@ The mod's version according to the extended semantic versioning: [Semantic Versi
 
 *Examples: `"1.0.0"`, `"1.0.0-rc1"`, `"1.2.3-ALPHA-1"`*
 
-*Implementation Note: Implementations of this specification should consider handling malformed versions (e.g. four-digit or single-digit) to avoid potential parsing crashes. The behavior of this handling however shall be undefined by this specification.*
+> *Implementation Note: Implementations of this specification should consider handling malformed versions (e.g., four-digit or single-digit) to avoid potential parsing crashes. The behavior of this handling, however, shall be undefined by this specification.*
 
 #### The `"dependencies"` Property
 
@@ -336,41 +354,41 @@ The mod's version according to the extended semantic versioning: [Semantic Versi
 
 **Description:**
 
-The `dependencyList` holds an ordered sequence of [`"modreference type"`](#the-modreference-type)s this mod relies on.
+The `dependencyList` holds an ordered sequence of [`"modreference"` types](#the-modreference-type) that this mod relies on.
 
 The list is either absent from the `modinfo.json` or contains at least one item.
 
-The dependency list is strictly left-right ordered, where the first entry resembles the most closest ancestor and the *n*'th entry the least closet ancestor. 
+The dependency list is strictly left-right ordered, where the first entry resembles the closest ancestor and the *n*'th entry the least close ancestor.
 
 The target mod itself must **not** be listed. Doing so would result in a dependency cycle!
 
-This specification supports multiple *resolve layouts*. A resolve layout essentially is an enumeration `resolve-layout` which describes how the dependency collection shall get interpreted and processed by an implementation.
+This specification supports multiple *resolve layouts*. A resolve layout is essentially an enumeration `resolve-layout` that describes how the dependency collection should be interpreted and processed by an implementation.
 
-The JSON allows to specify the desired resolve layout by adding its name as a `string` value as the first element of the list. Example:
+In JSON, the desired resolve layout can be specified by adding its name as a `string` value as the first element of the list. Example:
 
 ```json
 {
   "name": "MyMod",
-  "dependencies":
-  [
+  "dependencies": [
     "FullResolved", 
     {
-	  "modtype": 0,
-	  "identifier": "./Mods/BaseMod"		
+      "modtype": 0,
+      "identifier": "./Mods/BaseMod"		
     }	
   ]
 }
 ```
 
-If no resolve layout was specified in the JSON, the value `ResolveRecursive` shall be used as default.
+If no resolve layout is specified in the JSON, the value `ResolveRecursive` shall be used as the default.
 
-An explanation of the supported layouts is shown the table below:
+An explanation of the supported layouts is shown in the table below:
 
 | Resolve Layout | Meaning |
 |:--:|:--|
-|`ResolveRecursive`|The list shall only contain the mods direct ancestors. Each entry may have their own dependencies which shall get resolved recursively.|
-|`ResolveLastItem`|The list shall only contain the mods direct ancestors. Only the last item in the list shall be recursively resolved. There shall be no resolving for any of the previous entries. If the list only contains one element this shall also get recursively resolved.|
-|`FullResolved`|The list shall contain all ancestors of the target mod. The entries in the list shall be interpreted *as is*. No dependency resolving shall be done by tool.|
+|`ResolveRecursive`|TThe list shall only contain the mod's direct ancestors. Each entry may have its own dependencies, which shall be resolved recursively.|
+|`ResolveLastItem`|The list shall only contain the mod's direct ancestors. Only the last item in the list shall be recursively resolved. There shall be no resolving for previous entries. If the list contains only one element, this element shall also be recursively resolved.|
+|`FullResolved`|The list shall contain all ancestors of the target mod. The entries in the list shall be interpreted *as is*. No dependency resolving shall be performed by the tool.
+|
 
 [Partition IV](#iv-mod-dependency-handling) explains in detail the requirements how dependency resolving shall be implemented.
 
@@ -381,16 +399,15 @@ An explanation of the supported layouts is shown the table below:
 
 ### III.2.1 ModReference vs. ModIdentity
 
-A `ModReference` is distinguished by other properties than a `ModIdentity` in order to use it for dependency resolving. 
+A `ModReference` is distinguished by properties other than those of a `ModIdentity`, allowing it to be used for dependency resolving.
 
-*Example: A mod `A` may have multiple mod references e.g. one is located in Steam-Workshops and the other in `FoC/Mods/A/`. Both references point to the same `ModIdentity` (Name: A, Version: null, Dependencies:Empty) however the references itself are not equal.*
+*Example: A mod `A` may have multiple mod references, e.g., one located in Steam Workshop and another in `FoC/Mods/A/`. Both references point to the same `ModIdentity` (Name: A, Version: null, Dependencies: Empty); however, the references themselves are not equal.*
 
 ### III.2.2 ModReference Equality
 
-Two ModReferences equal when both properties `identifier` and `modtype` match. The `identifier` property is case-sensitive.
-This strategy has to get applied when resolving dependencies.
+Two `ModReferences` are considered equal when both properties, `identifier` and `modtype`, match. The `identifier` property is case-sensitive. This strategy must be applied when resolving dependencies.
 
-*Implementation Notes: It's up to an implementation of this specification to add more possible strategies. If the `identifier` contains a local path, it's up to the implementation to normalize the path if necessary.*
+> *Implementation Notes: It is up to an implementation of this specification to add more possible strategies. If the `identifier` contains a local path, it is the responsibility of the implementation to normalize the path if necessary.*
 
 ### III.2.3 Properties
 
@@ -404,17 +421,18 @@ This strategy has to get applied when resolving dependencies.
 
 **Description:**
 
-The modtype enumeration:
+The `modtype` enumeration:
 
 | Value | Meaning |
 |:--:|:--|
-|`0`|any normal mod inside the Mods/ directory|
-|`1`|a Steam Workshops mod|
+|`0`|any normal mod inside the `Mods/` directory|
+|`1`|a Steam Workshop mod|
 |`2`|a "virtual" mod.|
 
-*Rationale: The current mod does NOT contain a `modtype` property because the mod should not have to know it's own type. Otherwise sharing this file across steam and disk mods would not be possible. A `modreference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design choice was made because mod linking should always be considered for Steam Workshop mods. The possibility to reference local mods is a convenience functionality intended to be used by mod developers for test setups and development.*
+*Rationale: The current mod does NOT contain a `modtype` property because the mod should not have to know its own type. Otherwise, sharing this file across Steam and disk mods would not be possible. A `ModReference` requests this data, meaning tool support to determine the actual `modtype` is necessary. This design choice was made because mod linking should always be considered for Steam Workshop mods. The possibility to reference local mods is a convenience functionality intended to be used by mod developers for test setups and development.*
 
-*Note: Since virtual mods have an unstable/unpredictable identifier, they should not be used in an modinfo.json to avoid tool specific errors for the user. However this specification shall not forbid it.*
+> *Note: Since virtual mods have an unstable/unpredictable identifier, they should not be used in a `modinfo.json` to avoid tool-specific errors for the user. However, this specification shall not forbid it.*
+
 
 
 #### The `"identifier"` Property
@@ -427,7 +445,7 @@ The modtype enumeration:
 
 **Description:**
 
-This property either contains an absolute or relative path of the parent mod or holds the STEAM_ID for workshop mods.
+This property either contains an absolute or relative path of the parent mod or holds the `STEAM_ID` for workshop mods. The identifier cannot be `null` or an empty string.
 
 #### The `"version-range"` Property
 
@@ -439,11 +457,12 @@ This property either contains an absolute or relative path of the parent mod or 
 
 **Description:**
 
-This property shall only get parsed and otherwise ignored completely by an implementation of this specification. It explicitly is not used for `modreference` equality matching and dependency resolution. It shall only be used to custom tools.
+This property shall only be parsed and otherwise ignored completely by an implementation of this specification. It explicitly is not used for `modreference` equality matching and dependency resolution. It shall only be used by custom tools.
 
-This specification shares the same syntax and semantics as used for [npm node dependency ranges](https://github.com/npm/node-semver#ranges). If the property is unset, the version range `*` (which means `>= 0.0.0`) shall be used.
+This specification shares the same syntax and semantics as those used for [npm node dependency ranges](https://github.com/npm/node-semver#ranges). If the property is unset, the version range `*` (which means `>= 0.0.0`) shall be used.
 
-*Rationale: This property can be used for entries in a mod's mod dependency list. Custom tools might want to consume the given version range and perform a custom mod matching.*
+> *Rationale: This property can be used for entries in a mod's dependency list. 3rd party tools might want to consume the given version range and perform custom mod matching.*
+
 
 ---
 
@@ -451,7 +470,7 @@ This specification shares the same syntax and semantics as used for [npm node de
 
 ### III.3.1 Properties
 
-A `modinfo` is `modreference`, thus they share the same properties, with the same meaning.
+A `modinfo` is a `modreference`, thus they share the same properties with the same meanings.
 
 #### The `"summary"` Property
 
@@ -463,7 +482,7 @@ A `modinfo` is `modreference`, thus they share the same properties, with the sam
 
 **Description:**
 
-This property allows you to include a short summary about the mod supporting Steam-flavoured BBCode.
+This property allows you to include a short summary about the mod, supporting Steam-flavored BBCode.
 
 #### The `"icon"` Property
 
@@ -475,7 +494,7 @@ This property allows you to include a short summary about the mod supporting Ste
 
 **Description:**
 
-The path to the mod's icon file **relative** to the mod's root directory or an **absolute** path.
+The path to the mod's icon file, **relative** to the mod's root directory or an **absolute** path.
 
 
 #### The `"languages"` Property
@@ -484,15 +503,15 @@ The path to the mod's icon file **relative** to the mod's root directory or an *
 
 **Data Type**:  [`languageInfo`](#iii4-the-languageinfo-type)`[]`
 
-**Data Semantics**: Collection of supported languages
+**Data Semantics**: Set of supported languages
 
 **Description:**
 
-This property holds a collection of [`language`](#iii4-the-languageinfo-type) objects. Each item indicates a language that is supported by the mod. 
+This property holds a unique set of [`language`](#iii4-the-languageinfo-type) objects. Each item indicates a language that is supported by the mod. 
 
-The property is optional. When *NOT* present, the language **English** (`"en"`) is assumed to be default. However if the property is defined English *MUST* be included when supported by the mod, too.
+The property is optional. When *NOT* present, the language **English** (`"en"`) is assumed to be default. However, if the property is defined, English *MUST* be included when supported by the mod, too.
 
-*NOTE: If you are dealing with a situation where you have a variant modinfo file that shall get merged with a main modinfo file, the variant MUST explicitly set this property as well.* 
+If the array is empty, the property is considered as unset.
 
 #### The `"steamdata"` Property
 
@@ -510,13 +529,39 @@ The [`"steamdata type"`](#iii5-the-steamdata-type) container holds additional in
 
 **Level:** *OPTIONAL*
 
-**Data Type**: `Dictionay<string, object>`
+**Data Type**: `Dictionay<string, any>`
 
-**Data Semantics**: Collection of custom objects, stored by keys
+**Data Semantics**: Collection of arbitrary data, stored by keys
 
 **Description:**
 
-The `custom` property allows arbitrary extensions to the format. Programs implementing the core format should always be able to serialize the whole object, but the custom data wrapped within the extension object has to be accounted for only where applicable and/or needed.
+The `custom` property allows arbitrary extensions to the format using a collection of key/value paris. Key shall be unique strings. The value can be of any value.
+
+> *Note: Because the custom proptery exists only for 3rd party tools, it shall therefore be unspecified whether `key` is case-sensitive or insensitive.* 
+
+> *Implementation Note: Parsing the JSON as `Dictionary<string, any>` while guessing the conrect type of the value is potentially insecure. [Check out why](https://www.blackhat.com/docs/us-17/thursday/us-17-Munoz-Friday-The-13th-JSON-Attacks-wp.pdf). It is therefore recommented for 3rd party tools to deserialize `any` into the native JSON representation your JSON parser provides. E.g., for .NET this is `JsonElement`.*
+
+> *Implementation Note: 3rd party tools parsing the custom propertie should support the case where the JSON data contains elements of the same key wihtout crashing. It's up to the 3rd party tool which value(s) to use in those occasions.*
+
+### III.3.2 Merge Behavior
+
+It is possible to merge the values of one modinfo into another. This is used when there exists a main modinfo file and one or many variants. The variant can reuse properties of the main modinfo file, simply by not specifying a property. This allows the variant files to be as short as possible. 
+
+*The variant file is hereby called `target`. The main modinfo file is hereby called `base`.*
+
+In general, properties of `target` overwrite the properties from `base`. In other words, `target` is merged into `base`.
+
+The following rules apply when properties get overwritten:
+
+- `name` can never be overwritten because it is a required property for every modinfo file. 
+
+- `language` only gets overwritten if the property was explitily set by `target`.
+
+- `custom` is merged per key/value pair. In the case `base` and `target` contain the same `key`, the `value` of the `target` is used.
+
+- all other properties are overwritten by-reference. This means there shall be no merging of subsequent properties/items for objects and array data types such as `steamdata` or `dependencies`. 
+
+> *Implementation Note: An implementation of this specification must be aware whether a modinfo explicity set the `language` property the default value (English - FullLocalized) was applied implicitly.*
 
 ---
 
@@ -545,17 +590,26 @@ This property holds an [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639
 **Data Semantics**: Level of language support
 
 **Description:**
-
 The language support enumeration acts as a bit flag and is defined as follows:
 
 | Value | Meaning |
 |:--:|:--|
-|`1`| **Text:** A `mastertextfile_xxx.dat` is available in this language.|
-|`2`|**Speech**: Speech event files are in their own language folder. (Important for Movies, Missions and Holograms)|
-|`4`|**SFX** Sound effects, such as unit actions, are localized. |
-|`7`|**Fully localized:** Combines `1`, `2`, `4`|
+|`1`| **Text:** A `mastertextfile_xxx.dat` is available in this language. |
+|`2`| **Speech:** Speech event files are in their own language folder. (Important for Movies, Missions, and Holograms) |
+|`4`| **SFX:** Sound effects, such as unit actions, are localized. |
+|`7`| **Fully localized:** Combines `1`, `2`, and `4`. |
 
-When the property was omitted for a `language` object, value `7` (fully localized) is applied.
+When the property is omitted for a `language` object, the value `7` (fully localized) is applied.
+
+
+### III.4.2 LanguageInfo Equality
+A `LanguageInfo` is uniquely identified by its `code` property. The language code is case-insensitive.
+
+*Note: Validation shall not fail if multiple languages exist in the JSON modinfo. The behavior regarding which language is selected in such a case shall be undefined by this specification as long as any of the duplicate languages is selected.*
+
+*Rationale: JSON Schema does not support validating uniqueness on single properties. Neither does the JSON specification define how multiple keys shall be handled. Thus, this specification also leaves this undefined.*
+
+> *Implementation Note: Tools may offer additional equality strategies, which also include the `support` property. The contract defined above must be the default.*
 
 ---
 
@@ -606,8 +660,6 @@ The visibility enumeration [(based on Steam API)](https://partner.steamgames.com
 |`2`|private|
 |`3`|unlisted|
 
-*Note: Value `3` (unlisted) currently is not documented by Valve and should thus not get used for now.*
-
 #### The `"title"` Property
 
 **Level:** **REQUIRED**
@@ -631,23 +683,24 @@ The display name of the mod in Steam Workshops.
 
 **Description:**
 
-Arbitrary metadata as string.
+Arbitrary metadata as a string.
 
-*Implementation Notes: Even if this value is not present, tools should print this property with empty value `""` in the file. This behavior is recommended to increase compatibility with the Steam Workshops uploader.*
+> *Implementation Notes: Even if this value is not present, tools should print this property with an empty value `""` in the file. This behavior is recommended to increase compatibility with the Steam Workshop uploader.*
+
 
 #### The `"tags"` Property
 
 **Level:** **REQUIRED**
 
-**Data Type**: `String[]`
+**Data Type**: `Tag[]`
 
-**Data Semantics**: Collection of tags
+**Data Semantics**: Set of tags
 
 **Description:**
 
-Steam Tags as specified by the Steam Uploader.
+Steam tags as defined by the [Steam tag documentation](https://partner.steamgames.com/doc/api/ISteamUGC#SetItemTags). Tags are limited to 255 characters each, must only contain ASCII printable characters, and cannot include the comma `,` character. Extended ASCII characters (`> '\u007F'`) are not supported. Tags are case-sensitive, and each tag must be unique.
 
-At least either `EAW` or `FOC` is required to determine the game the mod shows up for.
+At least either `EAW` or `FOC` is required to determine the game for which the mod is displayed. It is permissible to support both game tags.
 
 
 #### The `"description"` Property
@@ -660,9 +713,10 @@ At least either `EAW` or `FOC` is required to determine the game the mod shows u
 
 **Description:**
 
-Optional description of the Mod in Steam flavoured BB-Code.
+Optional description of the Mod in Steam-flavored BBCode.
 
-*Implementation Notes: Even if this value is not present, tools should print this property with empty value `""` in the file. This behavior is recommended to increase compatibility with the Steam Workshops uploader.*
+> *Implementation Notes: Even if this value is not present, tools should print this property with an empty value `""` in the file. This behavior is recommended to increase compatibility with the Steam Workshop uploader.*
+
 
 
 #### The `"previewfile"` Property
@@ -675,68 +729,71 @@ Optional description of the Mod in Steam flavoured BB-Code.
 
 **Description:**
 
-Relative path to an image file which holds the preview image
+Relative path to an image file that holds the preview image.
 
-*Implementation Notes: Even if this value is not present, tools should print this property with empty value `""` in the file. This behavior is recommended to increase compatibility with the Steam Workshops uploader.*
+> *Implementation Notes: Even if this value is not present, tools should print this property with an empty value `""` in the file. This behavior is recommended to increase compatibility with the Steam Workshop uploader.*
+
 
 ---
 
 
 # IV Mod Dependency Handling
-The game supports chaining (could also be called *overriding* or *linked*) mods by queuing up the command line arguments `STEAMMOD` and/or `MODPATH`. 
-While the Command Line options only can resemble a line (or more precisely a Queue), real mod dependencies can look like complex tree due to multiple inheritance. Thus there needs to be a deterministic logic to convert the real hierarchy into a CLI compatible representation. 
 
-To describe relations between mods this specification introduces an optional [`dependencies`](#the-dependencies-property) property which is an ordered list.
+The game supports chaining (which could also be called *overriding* or *linked* mods) by queuing up the command line arguments `STEAMMOD` and/or `MODPATH`. While the command line options can only resemble a line (or, more precisely, a queue), real mod dependencies can appear as a complex tree due to multiple inheritance. Thus, there needs to be a deterministic logic to convert the real hierarchy into a CLI-compatible representation. 
 
-The conversion from a tree structure to a line is called *flattening* or *traversing*. Since the `dependencies` list supports multiple resolve layouts there are different strategies defined how the conversion shall behave.
+To describe relations between mods, this specification introduces an optional [`dependencies`](#the-dependencies-property) property, which is an ordered list.
+
+The conversion from a tree structure to a line is called *flattening* or *traversing*. Since the `dependencies` list supports multiple resolve layouts, different strategies are defined to dictate how the conversion shall behave.
 
 ## IV.1 Dependency Resolving Algorithm
 
-Each resolve layout implementations fullfil the following general requirements, in addition to its own requirements, to create a successful conversion:
+Each resolve layout implementation fulfills the following general requirements, in addition to its own requirements, to create a successful conversion:
 
-1. The `dependencies` list gets processed from start to end.
-2. The resulting list contains the target mod. It shall be the first element of the list.
-2. The resulting list must not have duplicates.
-3. The implementation must be able to recognize and respond to identified dependency cycles accordingly.
-4. Virtual Mods must be preserved in the resulting list.
+1. The `dependencies` list is processed from start to end.
+2. The resulting list contains the target mod, which shall be the first element of the list.
+3. The resulting list must not have duplicates.
+4. The implementation must be able to recognize and respond to identified dependency cycles accordingly.
+5. Virtual mods must be preserved in the resulting list.
 
-*Rationale: While virtual mods cannot be represented by a command line, which means they are practically invisible, they still need to exist in the resulting list, so tools always have the most precise data to deal with. Removing virtual mods from the flattened result is a tool specific implementation detail.*
+*Rationale: While virtual mods cannot be represented by a command line (which means they are practically invisible), they still need to exist in the resulting list so tools always have the most precise data to deal with. Removing virtual mods from the flattened result is a tool-specific implementation detail.*
 
+*Note: Converting a (non-binary) tree structure to a flattened and duplicate-free line is a one-way operation, which also loses accuracy. However, since in some cases multiple outcomes are possible, the resolve layout `ResolveRecursive` might lead to unexpected results. The requirements above are created to ensure consistency across multiple implementations.*
 
-*Note: Converting a (non-binary) tree structure to a flatteded and duplicate-free line is a one-way operation. It also looses accuracy. However, since in some cases multiple outcomes are possible, the resolve layout `ResolveRecursive` might lead to unexpected results. The requirements above are created to ensure consistency across multiple implementations.*
+*Advice: To ensure your mod always works as intended, it is recommended to keep the inheritance level to a minimum, and multiple inheritances should be avoided.*
 
-*Advise: For making sure your mod always works as intended, it's recommended to keep the inheritance level to a minimum. multiple inheritances should be avoided.*
 
 
 ## IV.1.1 Resolving `ResolveRecursive`
 
-Flattening shall be performed based on a Breadth-first search. This way the left-right order of the dependency list is kept.
+Flattening shall be performed based on a breadth-first search. This approach ensures that the left-right order of the dependency list is preserved.
 
-For each entry to be resolved the algorithm has to honor the resolve layout of the entries dependency list. The means the algorithm shall not resolve everything recursively but only where the resolve layout wants it.
+For each entry to be resolved, the algorithm must honor the resolve layout of the entry's dependency list. This means the algorithm shall not resolve everything recursively but only where the resolve layout specifies.
 
-Because of multiple inheritance, and particularly [diamond inheritance](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem) it is possible an entry occurs multiple times during resolution. In this case it is not guaranteed a cycle is present. Duplicates, which are not a cycle must however be removed from the resulting list.
+Due to multiple inheritance, particularly in the case of [diamond inheritance](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem), it is possible for an entry to occur multiple times during resolution. In such cases, it is not guaranteed that a cycle is present. However, duplicates that are not part of a cycle must be removed from the resulting list.
 
-The algorithm must ensure the resulting list is [topological sorted](https://en.wikipedia.org/wiki/Topological_sorting) while still preserving a left-to-right order of direct ancestors.
+The algorithm must ensure that the resulting list is [topologically sorted](https://en.wikipedia.org/wiki/Topological_sorting) while still preserving the left-to-right order of direct ancestors.
 
-To guide an implementation, this specification defines the following [test cases](#iv2-full-recursive-dependency-resolving-test-cases) a fully recursive resolving algorithm must pass.
+To guide an implementation, this specification defines the following [test cases](#iv2-full-recursive-dependency-resolving-test-cases) that a fully recursive resolving algorithm must pass.
 
-*Implementation Note: Cycles detection works best on the directed dependency graph, rather than on a traversed list.*
+*Implementation Note: Cycle detection works best on the directed dependency graph rather than on a traversed list.*
+
 
 
 ## IV.1.2 Resolving `ResolveLastItem`
-Only the last (or the only element) in the list shall be resolved as specified in [Resolving ResolveRecursive](#iv11-resolving-resolverecursive).
+
+Only the last (or the only) element in the list shall be resolved, as specified in [Resolving ResolveRecursive](#iv11-resolving-resolverecursive).
 
 As soon as there exists a duplicate, a dependency cycle is present.
 
 ## IV.1.3 Resolving `FullResolved`
-Since this layout indicates the dependency list shall be interpreted *as is*, the flattening algorithm shall return the list unmodified. 
+
+Since this layout indicates that the dependency list shall be interpreted *as is*, the flattening algorithm shall return the list unmodified.
 
 If the list contains a duplicate, a dependency cycle is present.
 
-
 ## IV.2 Full Recursive Dependency Resolving Test Cases
 
-Node `A` is always the mod that should be loaded. Every mod following after  `:` are direct dependencies of the mod, if multiple they are separated by a `,`.
+Node `A` is always the mod that should be loaded. Every mod following `:` are direct dependencies of the mod; if there are multiple, they are separated by a `,`.
 
 Each dependency list has the option `ResolveRecursive` specified.
 
