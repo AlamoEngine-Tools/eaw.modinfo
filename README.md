@@ -131,7 +131,7 @@ The same mod may be installed multiple times on a user’s machine in different 
 
 ## I.1 Representing Mods
 
-The following diagram illustrates the relationships between the data structures defined in this specification. As shown, there is a specific mod installation called *MyMod* with the listed attributes. *MyMod* references a *Modinfo File*, which provides information on *Name*, *Version* and *Dependencies*. BBoth the mod instance and the `ModInfo`, are an instance of the `ModIdentity` data. The mod instance's properties `Type`, `Identifier`, `Location` are defined by the mod itself. A `ModReference` instance may act as a pointer to the concrete instance by sharing the values of the mod's properties `Type`, and `Identifier`.
+The following diagram illustrates the relationships between the data structures defined in this specification. As shown, there is a specific mod installation called *MyMod* with the listed attributes. *MyMod* references a *Modinfo File*, which provides information on *Name*, *Version* and *Dependencies*. Both the mod instance and the `ModInfo`, are an instance of the `ModIdentity` data. The mod instance's properties `Type`, `Identifier`, `Location` are defined by the mod itself. A `ModReference` instance may act as a pointer to the concrete instance by sharing the values of the mod's properties `Type`, and `Identifier`.
 The next sections will explain these data (`ModIdentity`, `ModInfo` and `ModReference`) in more detail. 
 ![Mod Data Structure Relationship Diagram](/img/relationship.png)
 
@@ -303,8 +303,8 @@ Implementations of this specification must provide an identity check based on tw
    - The `name` comparison is case-sensitive.
    - The `version` comparison returns "equal" if both versions are either absent or both are present with the same value.
    - The `dependencies` comparison returns "equal" if both dependency lists (see [ModReference Equality](#iii22-modreference-equality)):
-     - Have the same `resolve-layout` property,
-     - Contain the exact same number of elements,
+     - Have the same `resolve-layout` property AND,
+     - Contain the exact same number of elements AND,
      - Have all elements matching in value and position.
 
 The second strategy is the *default* identity-checking strategy.
@@ -859,7 +859,7 @@ A-C-E
   D
 
 
-Expected list: (A,) B, C, D, E
+Expected list: A, B, C, D, E
 
 ```
 
