@@ -1,9 +1,9 @@
-# eaw.modinfo Definition - v3.0.0
+# eaw.modinfo Definition - v3.0.1
 A standard format for Star Wars: Empire at War mod information files.
 
 These files enable mod creators and tool developers to specify metadata about a given Empire at War mod.
 
-The sections below detail the required and optional content for eaw.modinfo in Version 3.0.0.
+The sections below detail the required and optional content for eaw.modinfo in Version 3.0.1.
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
@@ -33,7 +33,8 @@ The sections below detail the required and optional content for eaw.modinfo in V
     - [III.2.1 ModReference vs. ModIdentity](#iii21-modreference-vs-modidentity)
     - [III.2.3 Properties](#iii23-properties)
   - [III.3 The "modinfo" Type](#iii3-the-modinfo-type)
-    - [III.3.1 Properties](#iii31-properties)
+    - [III.3.1 Properties](#iii31-properties) 
+    - [III.3.1 Merge Behavior](#iii32-merge-behavior)
   - [III.4 The "languageInfo" Type](#iii4-the-languageinfo-type)
     - [III.4.1 Properties](#iii41-properties)
   - [III.5 The "steamdata" Type](#iii5-the-steamdata-type)
@@ -65,6 +66,9 @@ Not a breaking change are modifications like:
 - Adding a required property when default behavior is backward-compatible
 
 ### Version History: 
+
+*v3.0.1*
+  - Specified that the optional lists `modidentity.dependencies`, `modinfo.languages` and `modinfo.custom` are not `nullable`.
 
 *v3.0.0*
   - **Changed ID domain**
@@ -131,7 +135,7 @@ The same mod may be installed multiple times on a user’s machine in different 
 
 ## I.1 Representing Mods
 
-The following diagram illustrates the relationships between the data structures defined in this specification. As shown, there is a specific mod installation called *MyMod* with the listed attributes. *MyMod* references a *Modinfo File*, which provides information on *Name*, *Version* and *Dependencies*. BBoth the mod instance and the `ModInfo`, are an instance of the `ModIdentity` data. The mod instance's properties `Type`, `Identifier`, `Location` are defined by the mod itself. A `ModReference` instance may act as a pointer to the concrete instance by sharing the values of the mod's properties `Type`, and `Identifier`.
+The following diagram illustrates the relationships between the data structures defined in this specification. As shown, there is a specific mod installation called *MyMod* with the listed attributes. *MyMod* references a *Modinfo File*, which provides information on *Name*, *Version* and *Dependencies*. Both the mod instance and the `ModInfo`, are an instance of the `ModIdentity` data. The mod instance's properties `Type`, `Identifier`, `Location` are defined by the mod itself. A `ModReference` instance may act as a pointer to the concrete instance by sharing the values of the mod's properties `Type`, and `Identifier`.
 The next sections will explain these data (`ModIdentity`, `ModInfo` and `ModReference`) in more detail. 
 ![Mod Data Structure Relationship Diagram](/img/relationship.png)
 
@@ -303,8 +307,8 @@ Implementations of this specification must provide an identity check based on tw
    - The `name` comparison is case-sensitive.
    - The `version` comparison returns "equal" if both versions are either absent or both are present with the same value.
    - The `dependencies` comparison returns "equal" if both dependency lists (see [ModReference Equality](#iii22-modreference-equality)):
-     - Have the same `resolve-layout` property,
-     - Contain the exact same number of elements,
+     - Have the same `resolve-layout` property AND,
+     - Contain the exact same number of elements AND,
      - Have all elements matching in value and position.
 
 The second strategy is the *default* identity-checking strategy.
@@ -356,7 +360,7 @@ The mod's version according to the extended semantic versioning: [Semantic Versi
 
 The `dependencyList` holds an ordered sequence of [`"modreference"` types](#the-modreference-type) that this mod relies on.
 
-The list is either absent from the `modinfo.json` or contains at least one item.
+The list is either absent from the `modinfo.json` or contains at least one item. The list is not nullable.
 
 The dependency list is strictly left-right ordered, where the first entry resembles the closest ancestor and the *n*'th entry the least close ancestor.
 
@@ -513,6 +517,8 @@ The property is optional. When *NOT* present, the language **English** (`"en"`) 
 
 If the array is empty, the property is considered as unset.
 
+The value is not nullable.
+
 #### The `"steamdata"` Property
 
 **Level:** *OPTIONAL*
@@ -535,7 +541,9 @@ The [`"steamdata type"`](#iii5-the-steamdata-type) container holds additional in
 
 **Description:**
 
-The `custom` property allows arbitrary extensions to the format using a collection of key/value paris. Key shall be unique strings. The value can be of any value.
+The `custom` property allows arbitrary extensions to the format using a collection of key/value paris. Key shall be unique strings. The value can be of any value. 
+
+The property is not nullable.
 
 > *Note: Because the custom proptery exists only for 3rd party tools, it shall therefore be unspecified whether `key` is case-sensitive or insensitive.* 
 
@@ -859,7 +867,7 @@ A-C-E
   D
 
 
-Expected list: (A,) B, C, D, E
+Expected list: A, B, C, D, E
 
 ```
 
