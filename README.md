@@ -33,7 +33,7 @@ The sections below detail the required and optional content for eaw.modinfo in V
     - [III.2.1 ModReference vs. ModIdentity](#iii21-modreference-vs-modidentity)
     - [III.2.3 Properties](#iii23-properties)
   - [III.3 The "modinfo" Type](#iii3-the-modinfo-type)
-    - [III.3.1 Properties](#iii31-properties)
+    - [III.3.1 Merge Behavior](#iii32-merge-behavior)
   - [III.4 The "languageInfo" Type](#iii4-the-languageinfo-type)
     - [III.4.1 Properties](#iii41-properties)
   - [III.5 The "steamdata" Type](#iii5-the-steamdata-type)
