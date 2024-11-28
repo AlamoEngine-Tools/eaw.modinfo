@@ -1,4 +1,4 @@
-# eaw.modinfo Definition - v3.0.0
+# eaw.modinfo Definition - v3.0.1
 A standard format for Star Wars: Empire at War mod information files.
 
 These files enable mod creators and tool developers to specify metadata about a given Empire at War mod.
@@ -33,6 +33,7 @@ The sections below detail the required and optional content for eaw.modinfo in V
     - [III.2.1 ModReference vs. ModIdentity](#iii21-modreference-vs-modidentity)
     - [III.2.3 Properties](#iii23-properties)
   - [III.3 The "modinfo" Type](#iii3-the-modinfo-type)
+    - [III.3.1 Properties](#iii31-properties) 
     - [III.3.1 Merge Behavior](#iii32-merge-behavior)
   - [III.4 The "languageInfo" Type](#iii4-the-languageinfo-type)
     - [III.4.1 Properties](#iii41-properties)
@@ -65,6 +66,9 @@ Not a breaking change are modifications like:
 - Adding a required property when default behavior is backward-compatible
 
 ### Version History: 
+
+*v3.0.1*
+  - Specified that the optional lists `modidentity.dependencies`, `modinfo.languages` and `modinfo.custom` are not `nullable`.
 
 *v3.0.0*
   - **Changed ID domain**
@@ -356,7 +360,7 @@ The mod's version according to the extended semantic versioning: [Semantic Versi
 
 The `dependencyList` holds an ordered sequence of [`"modreference"` types](#the-modreference-type) that this mod relies on.
 
-The list is either absent from the `modinfo.json` or contains at least one item.
+The list is either absent from the `modinfo.json` or contains at least one item. The list is not nullable.
 
 The dependency list is strictly left-right ordered, where the first entry resembles the closest ancestor and the *n*'th entry the least close ancestor.
 
@@ -513,6 +517,8 @@ The property is optional. When *NOT* present, the language **English** (`"en"`) 
 
 If the array is empty, the property is considered as unset.
 
+The value is not nullable.
+
 #### The `"steamdata"` Property
 
 **Level:** *OPTIONAL*
@@ -535,7 +541,9 @@ The [`"steamdata type"`](#iii5-the-steamdata-type) container holds additional in
 
 **Description:**
 
-The `custom` property allows arbitrary extensions to the format using a collection of key/value paris. Key shall be unique strings. The value can be of any value.
+The `custom` property allows arbitrary extensions to the format using a collection of key/value paris. Key shall be unique strings. The value can be of any value. 
+
+The property is not nullable.
 
 > *Note: Because the custom proptery exists only for 3rd party tools, it shall therefore be unspecified whether `key` is case-sensitive or insensitive.* 
 
