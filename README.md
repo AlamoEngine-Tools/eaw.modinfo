@@ -3,7 +3,7 @@ A standard format for Star Wars: Empire at War mod information files.
 
 These files enable mod creators and tool developers to specify metadata about a given Empire at War mod.
 
-The sections below detail the required and optional content for eaw.modinfo in Version 3.0.0.
+The sections below detail the required and optional content for eaw.modinfo in Version 3.0.1.
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
