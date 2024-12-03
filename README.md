@@ -68,7 +68,7 @@ Not a breaking change are modifications like:
 ### Version History: 
 
 *v3.0.2*
-  - `modreference.identifier` does not anymore specifies exactly its data content.
+  - `modreference.identifier` does not specify its data concrete content anymore.
   - `steamdata.publishedfileid` shall be able to parse into a `ulong`.
 
 *v3.0.1*
@@ -454,12 +454,12 @@ The `modtype` enumeration:
 **Description:**
 
 Uniquely and predictably identifies a mod reference. Two mod references with the same identifier are considered to be equal.
-While the content its data shall be undefined by this specification, the content shall be predictable, so that it can be used to globally identify mod dependencies. 
+While the content of the identifier shall be undefined by this specification, the content shall be predictable, so that it can be used to globally identify mod dependencies. 
 The identifier cannot be `null` or an empty string.
 
 > *Example:* Predictable content can be: 
-> - the Steam Workshop ID for Steam Workshop mods
-> - a (relative or absolute) path for ordinary mods
+> - the Steam Workshop ID for Steam Workshop mods,
+> - a (relative or absolute) path for ordinary mods,
 > - Modinfo data for virtual mods.
 
 > *Implementation Note: When using file system paths or modinfo data as identifier, data normalization might be necessary to ensure cross-system/platform compatibility.*
