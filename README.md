@@ -1,9 +1,9 @@
-# eaw.modinfo Definition - v3.0.1
+# eaw.modinfo Definition - v3.0.2
 A standard format for Star Wars: Empire at War mod information files.
 
 These files enable mod creators and tool developers to specify metadata about a given Empire at War mod.
 
-The sections below detail the required and optional content for eaw.modinfo in Version 3.0.1.
+The sections below detail the required and optional content for eaw.modinfo in Version 3.0.2.
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
@@ -66,6 +66,10 @@ Not a breaking change are modifications like:
 - Adding a required property when default behavior is backward-compatible
 
 ### Version History: 
+
+*v3.0.2*
+  - `modreference.identifier` does not anymore specifies exactly its data content.
+  - `steamdata.publishedfileid` shall be able to parse into a `ulong`.
 
 *v3.0.1*
   - Specified that the optional lists `modidentity.dependencies`, `modinfo.languages` and `modinfo.custom` are not `nullable`.
@@ -449,7 +453,18 @@ The `modtype` enumeration:
 
 **Description:**
 
-This property either contains an absolute or relative path of the parent mod or holds the `STEAM_ID` for workshop mods. The identifier cannot be `null` or an empty string.
+Uniquely and predictably identifies a mod reference. Two mod references with the same identifier are considered to be equal.
+While the content its data shall be undefined by this specification, the content shall be predictable, so that it can be used to globally identify mod dependencies. 
+The identifier cannot be `null` or an empty string.
+
+> *Example:* Predictable content can be: 
+> - the Steam Workshop ID for Steam Workshop mods
+> - a (relative or absolute) path for ordinary mods
+> - Modinfo data for virtual mods.
+
+> *Implementation Note: When using file system paths or modinfo data as identifier, data normalization might be necessary to ensure cross-system/platform compatibility.*
+
+> *Security Note: Parsing the identifier shall only be done after data validation or sanitization in order to prevent security risks.*
 
 #### The `"version-range"` Property
 
@@ -547,9 +562,9 @@ The property is not nullable.
 
 > *Note: Because the custom proptery exists only for 3rd party tools, it shall therefore be unspecified whether `key` is case-sensitive or insensitive.* 
 
-> *Implementation Note: Parsing the JSON as `Dictionary<string, any>` while guessing the conrect type of the value is potentially insecure. [Check out why](https://www.blackhat.com/docs/us-17/thursday/us-17-Munoz-Friday-The-13th-JSON-Attacks-wp.pdf). It is therefore recommented for 3rd party tools to deserialize `any` into the native JSON representation your JSON parser provides. E.g., for .NET this is `JsonElement`.*
-
 > *Implementation Note: 3rd party tools parsing the custom propertie should support the case where the JSON data contains elements of the same key wihtout crashing. It's up to the 3rd party tool which value(s) to use in those occasions.*
+
+> *Security Note: Parsing the JSON as `Dictionary<string, any>` while guessing the conrect type of the value is potentially insecure. [Check out why](https://www.blackhat.com/docs/us-17/thursday/us-17-Munoz-Friday-The-13th-JSON-Attacks-wp.pdf). It is therefore recommented for 3rd party tools to deserialize `any` into the native JSON representation your JSON parser provides. E.g., for .NET this is `JsonElement`.*
 
 ### III.3.2 Merge Behavior
 
@@ -635,7 +650,7 @@ A `LanguageInfo` is uniquely identified by its `code` property. The language cod
 
 **Description:**
 
-The Steam Workshop ID.
+The Steam Workshop ID, which shall be able to parse into an `unsigned long`.
 
 #### The `"contentfolder"` Property
 
