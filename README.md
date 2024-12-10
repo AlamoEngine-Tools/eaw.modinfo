@@ -1,9 +1,9 @@
-# eaw.modinfo Definition - v3.0.2
+# eaw.modinfo Definition - v4.0.0
 A standard format for Star Wars: Empire at War mod information files.
 
 These files enable mod creators and tool developers to specify metadata about a given Empire at War mod.
 
-The sections below detail the required and optional content for eaw.modinfo in Version 3.0.2.
+The sections below detail the required and optional content for eaw.modinfo in Version 4.0.0.
 
 ## Contents of the Specification:
 [Changes](#notable-changes)
@@ -16,6 +16,7 @@ The sections below detail the required and optional content for eaw.modinfo in V
     - [I.1.3 ModReference](#i13-modreference)
   - [I.2 Physical Mods](#i2-physical-mods)
   - [I.3 Runtime-Mods](#i3-runtime-mods)
+  - [I.4 Instanciating Mods](#i4-instaciating-mods)
   
 **Partition II**
 - [II. Modinfo JSON File](#ii-modinfo-json-file)
@@ -31,7 +32,9 @@ The sections below detail the required and optional content for eaw.modinfo in V
     - [III.1.2 Properties](#iii12-properties)
   - [III.2 The "modreference" Type](#iii2-the-modreference-type)
     - [III.2.1 ModReference vs. ModIdentity](#iii21-modreference-vs-modidentity)
+    - [III.2.2 ModReference and Equality](#iii22-modreference-equality)
     - [III.2.3 Properties](#iii23-properties)
+    - [III.2.4 Creating Identifiers](#iii24-creating-identifiers)
   - [III.3 The "modinfo" Type](#iii3-the-modinfo-type)
     - [III.3.1 Properties](#iii31-properties) 
     - [III.3.1 Merge Behavior](#iii32-merge-behavior)
@@ -66,6 +69,12 @@ Not a breaking change are modifications like:
 - Adding a required property when default behavior is backward-compatible
 
 ### Version History: 
+
+*v4.0.0*
+  - **`modreference.identifier` again specifies its concrete content 
+but now supports the scenario to uniquely identify two mods at the same location.**
+  - **Specified how to instanciate mods in the presence of this specification**
+  - `modreference.identifer` and `modidentity.name` is not case-insensitive for equality matching
 
 *v3.0.2*
   - `modreference.identifier` does not specify its data concrete content anymore.
@@ -186,6 +195,35 @@ Virtual Mods require a `name` and respectively an `identifier` for a `ModReferen
 
 The combination of the virtual mod’s name and its dependency list constitutes the `ModIdentity` data for this instance.
 
+## I.4 Instantiating Mods
+
+An instance of a mod must have its `mod-reference.identifier` set according to the rules specified in [III.2.4 Creating Identifiers](#iii24-creating-identifiers).
+
+### I.4.1 Mod Types
+
+A mod's type is determined by its installation location.
+
+- If the mod is located in a Steam Workshop directory, and the mod's root folder name is a valid Steam Workshop identifier (convertible to a `unsigned long`), the resulting `modtype` is `1` (Steam Workshop).
+  
+- In all other cases, the type is `0` (Default).
+
+> *Note: Virtual mods are explicitly not supported. It is up to third-party developers to determine how to instantiate virtual mods.*
+
+### I.4.2 Modinfo Files
+
+The following rules apply when instantiating mods in the presence of modinfo files, as specified in [II.3 File Position](#ii3-file-position): 
+
+- If no modinfo files are present, the mod is instantiated normally.
+
+- If only a main modinfo file exists, one mod instance is created.
+
+- If only variant modinfo files exist, one mod instance is created for each variant file.
+
+- If both a main modinfo file and one or more variant modinfo files exist, one mod instance is created for the main modinfo file, and one mod instance is created for each variant modinfo file.
+
+- If the main modinfo file is malformed, the mod is instantiated normally.
+
+- If a variant modinfo file is malformed, that specific variant mod is not instantiated. If all variant files are malformed, it must be ensured that at least one mod is instantiated. This can be derived either from the main modinfo file (if present) or by falling back to normal instantiation as if no modinfo file were present.
 ---
 
 # II. Modinfo JSON File
@@ -211,8 +249,6 @@ Option `2` can be used to create different variants of a mod that share the same
 
 *Example: If your mod is a submod for two different base mods, this setup allows you to develop and upload the mod once, while targeting both base mods simultaneously.*
 
- > *Implementation Note: In practice, this will instantiate a new mod for each variant available.*
-
 ## II.3 File Position
 
 The target directory is the top level of the mod's folder (where the mod's `data` folder is located).
@@ -225,9 +261,7 @@ Merging is described in [III.3.2](#iii32-merge-behavior).
 
 If only variant files are present, each acts as a standalone main file.
 
-> *Implementation Note: Tools should return mod instances for both the main `modinfo.json` and variant files. This allows mod creators to support official sub-mods or variants. The `modinfo.json` defines the main mod, while the variant files define alternative configurations using the main mod as a dependency.*
-
-> *[Superseded by v3.0.0]* ~~*Implementation Note: If a mod folder contains variant files, only these should yield a mod instance. The main `modinfo.json` file (if it exists) or just the directory itself should be ignored.*~~
+[I.4 Instanciating Mods](#i4-instantiating-mods) specifies how to create mods are created form Modinfo files.
 
 ## II.4 Exemplary Content
 
@@ -306,9 +340,9 @@ A mod identity is used to fully qualify a mod definition. To compare the identit
 
 Implementations of this specification must provide an identity check based on two different strategies:
 
-1. Only the `name` is considered, with a case-sensitive comparison.
+1. Only the `name` is considered, with a case-insensitive comparison.
 2. The `name`, `version`, and `dependencies` are all considered:
-   - The `name` comparison is case-sensitive.
+   - The `name` comparison is case-insensitive.
    - The `version` comparison returns "equal" if both versions are either absent or both are present with the same value.
    - The `dependencies` comparison returns "equal" if both dependency lists (see [ModReference Equality](#iii22-modreference-equality)):
      - Have the same `resolve-layout` property AND,
@@ -413,7 +447,7 @@ A `ModReference` is distinguished by properties other than those of a `ModIdenti
 
 ### III.2.2 ModReference Equality
 
-Two `ModReferences` are considered equal when both properties, `identifier` and `modtype`, match. The `identifier` property is case-sensitive. This strategy must be applied when resolving dependencies.
+Two `ModReferences` are considered equal when both properties, `identifier` and `modtype`, match. The `identifier` property is case-insensitive. This strategy must be applied when resolving dependencies.
 
 > *Implementation Notes: It is up to an implementation of this specification to add more possible strategies. If the `identifier` contains a local path, it is the responsibility of the implementation to normalize the path if necessary.*
 
@@ -453,18 +487,18 @@ The `modtype` enumeration:
 
 **Description:**
 
-Uniquely and predictably identifies a mod reference. Two mod references with the same identifier are considered to be equal.
-While the content of the identifier shall be undefined by this specification, the content shall be predictable, so that it can be used to globally identify mod dependencies. 
-The identifier cannot be `null` or an empty string.
+Uniquely and predictably identifies a mod reference. Two mod references with the same identifier are considered equal.  
+The content must be predictable so it can be used to locally identify mods.  
 
-> *Example:* Predictable content can be: 
-> - the Steam Workshop ID for Steam Workshop mods,
-> - a (relative or absolute) path for ordinary mods,
-> - Modinfo data for virtual mods.
+The identifier cannot be `null` or an empty string.  
 
-> *Implementation Note: When using file system paths or modinfo data as identifier, data normalization might be necessary to ensure cross-system/platform compatibility.*
+The rules for creating the identifier are described in [III.2.4 Creating Identifiers](#iii24-creating-identifiers).  
 
-> *Security Note: Parsing the identifier shall only be done after data validation or sanitization in order to prevent security risks.*
+> *Note: The identifier should only be used for comparing two references. It is not intended for deserialization to extract information, such as Steam Workshop IDs, file paths or a mod names.*
+
+> *Rationale: The identifier is only locally unique and not globally unique because file paths are tied to the current system. For Steam Workshop items, the ID is inherently globally unique.*
+
+> *Security Note: Deserializing the identifier, if really necessary, should only occur after proper data validation or sanitization to prevent security risks.*
 
 #### The `"version-range"` Property
 
@@ -481,6 +515,75 @@ This property shall only be parsed and otherwise ignored completely by an implem
 This specification shares the same syntax and semantics as those used for [npm node dependency ranges](https://github.com/npm/node-semver#ranges). If the property is unset, the version range `*` (which means `>= 0.0.0`) shall be used.
 
 > *Rationale: This property can be used for entries in a mod's dependency list. 3rd party tools might want to consume the given version range and perform custom mod matching.*
+
+
+## III.2.4 Creating Identifiers
+
+The following rules apply to create a identifier: 
+
+#### Default Mods
+For default mods, the identifier is the mod's install directory path.
+
+In the case where the mod's location produces multiple mod instances due to variant modinfo files, append the variant's name to the path.
+
+For mods installed in the game's Mods directory, use the relative path to the `GAME_DIR/Mods/` directory. This effectively means using just the mod's folder name.
+
+For mods installed elsewhere, use the absolute path.
+
+**`Identifier := PATH (':' MOD_NAME)?`**
+
+*Example (Mod installed in Mods folder)*  
+`Identifier = "mod-folder-name"`
+
+*Example (Variant Mod installed in Mods folder)*  
+`Identifier = "mod-folder-name:Variant1"`
+
+*Example (Variant Mod installed elsewhere)*  
+`Identifier = "C:\mod-folder-name:Variant1"`
+
+> *Notes and Rationale:*
+> - The identifier is compared in a case-insensitive manner, aligning with the Windows file system. While this may cause collisions on Linux systems, this is an acceptable trade-off to make manual creation of modinfo files more error tolerant.
+Therefore, the identifier should not be parsed.  
+> - Absolute paths identifiers are intended solely for development purposes to work locally on a developer's system. Absolute paths vary across operating systems (e.g., Linux uses `'/'` as a separator, while Windows uses `'\'` by default). No additional guarantees are provided for absolute paths. 
+> - Appending the mod's name to the path, with the syntax specified here, effectively makes the path invalid for Windows due to the `':'` character being prohibited in file names. 
+
+#### Steam Workshops Mods
+
+For Steam Workshop mods, the identifier is the mod's Steam Workshop ID. 
+
+In the case the mod's location produces multiple mod instances due to variant modinfo files, append the variant's name to the Steam Workshops ID.
+**`Identifier := STEAM_WS_ID (':' MOD_NAME)?`**
+
+*Example (Workshop Mod)* 
+`Identifier = "1234567890"`
+
+*Example (Variant Workshop Mod)* 
+`Identifier = "1234567890:Variant1"`
+
+
+#### Virtual Mods
+
+For virtual mods, the identifier is the mod identity data in JSON format. 
+
+**`Identifier := MOD_IDENTITY_JSON`**
+
+*Example:* 
+```
+Identifier = "{
+  "name": "Virtual Mod Name",
+  "version": "1.0.0",
+  "dependencies": [
+    "FullResolved", 
+    {
+      "modtype": 0,
+      "identifier": "./Mods/BaseMod"		
+    }	
+  ]
+}"`
+```
+
+> *Implementation Note: Avoid deserialization of the identifier to check equality. 
+Instead a library should be used, that procudes stable JSON data, so the identifier can be compared on string level.*
 
 
 ---
