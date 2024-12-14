@@ -207,7 +207,7 @@ A mod's type is determined by its installation location.
   
 - In all other cases, the type is `0` (Default).
 
-> *Note: Virtual mods are explicitly not supported. It is up to third-party developers to determine how to instantiate virtual mods.*
+> *Note: Creating Virtual mods is explicitly not specified. It is up to third-party developers to determine how to instantiate virtual mods.*
 
 ### I.4.2 Modinfo Files
 
