@@ -213,17 +213,18 @@ A mod's type is determined by its installation location.
 
 The following rules apply when instantiating mods in the presence of modinfo files, as specified in [II.3 File Position](#ii3-file-position): 
 
-- If no modinfo files are present, the mod is instantiated normally.
+i) If no modinfo files are present, the mod is instantiated normally.
 
-- If only a main modinfo file exists, one mod instance is created.
+ii) If only a main modinfo file exists, one mod instance is created.
 
-- If only variant modinfo files exist, one mod instance is created for each variant file.
+iii) If only variant modinfo files exist, one mod instance is created for each variant file without creating an additional, normal instance.
 
-- If both a main modinfo file and one or more variant modinfo files exist, one mod instance is created for the main modinfo file, and one mod instance is created for each variant modinfo file.
+iv) If both a main modinfo file and one or more variant modinfo files exist, one mod instance is created for the main modinfo file, and one mod instance is created for each variant modinfo file.
 
-- If the main modinfo file is malformed, the mod is instantiated normally.
+v) If the main modinfo file is malformed, the mod is instantiated normally.
 
-- If a variant modinfo file is malformed, that specific variant mod is not instantiated. If all variant files are malformed, it must be ensured that at least one mod is instantiated. This can be derived either from the main modinfo file (if present) or by falling back to normal instantiation as if no modinfo file were present.
+vi) If a variant modinfo file is malformed, that specific variant mod is not instantiated. If all variant files are malformed, it must be ensured that at least one mod is instantiated. This can be derived either from the main modinfo file (if present) or by falling back to normal instantiation as if no modinfo file were present.
+
 ---
 
 # II. Modinfo JSON File
@@ -524,7 +525,7 @@ The following rules apply to create a identifier:
 #### Default Mods
 For default mods, the identifier is the mod's install directory path.
 
-In the case where the mod's location produces multiple mod instances due to variant modinfo files, append the variant's name to the path.
+In the case where the mod's location produces multiple mod instances due to variant modinfo files, append the variant's name to the path, while not appending the mod's name for a possible existing main modinfo.
 
 For mods installed in the game's Mods directory, use the relative path to the `GAME_DIR/Mods/` directory. This effectively means using just the mod's folder name.
 
