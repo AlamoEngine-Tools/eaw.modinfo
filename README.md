@@ -520,72 +520,86 @@ This specification shares the same syntax and semantics as those used for [npm n
 
 ## III.2.4 Creating Identifiers
 
-The following rules apply to create a identifier: 
+Creating an identifier for a `modreference` is done using the following general rules:
+
+```
+identifier    :	steam_id | default_id | virtual_id
+steam_id      : STEAM_WORKDHOPS_ID appended_name?
+default_id    :	FILE_SYSTEM_PATH appended_name?
+virtual_id    :	MODINFO_JSON
+appended_name : ':' MOD_NAME
+```
+
+As shown, the created identifier differs depending on the mod's type. Steam and default mods use a base identifier, which is the Steam Workshop ID or the file system path, respectively. Virtual mods use the modinfo data as JSON.
+
+The following sections define more details not represented by the grammar above.
+
+> *Note: The grammar shown above is only used for creating identifiers. The grammar is not deserializable. For example, `STEAM_WORKSHOPS_ID` and `FILE_SYSTEM_PATH` are actually indistinguishable terminals, so a parser would be unable to decide whether the rule `steam_id` or `default_id` applies.*
 
 #### Default Mods
-For default mods, the identifier is the mod's install directory path.
+For default mods, the rule `default_id` applies. The base identifier is the mod's install directory path (`FILE_SYSTEM_PATH`).
 
-In the case where the mod's location produces multiple mod instances due to variant modinfo files, append the variant's name to the path, while not appending the mod's name for a possible existing main modinfo.
+For mods installed in the game's Mods directory, use the relative path to the `GAME_DIR/Mods/` directory. This effectively means the identifier is simply the mod's folder name.
 
-For mods installed in the game's Mods directory, use the relative path to the `GAME_DIR/Mods/` directory. This effectively means using just the mod's folder name.
+For all identifiers created from a variant modinfo file, append the mod's name, even if there is only one variant modinfo file, using the creation rule `appended_name`.
 
 For mods installed elsewhere, use the absolute path.
 
-**`Identifier := PATH (':' MOD_NAME)?`**
-
 *Example (Mod installed in Mods folder)*  
-`Identifier = "mod-folder-name"`
+`identifier = "mod-folder-name"`
 
 *Example (Variant Mod installed in Mods folder)*  
-`Identifier = "mod-folder-name:Variant1"`
+`identifier = "mod-folder-name:Variant1"`
 
 *Example (Variant Mod installed elsewhere)*  
-`Identifier = "C:\mod-folder-name:Variant1"`
+`identifier = "C:\mod-folder-name:Variant1"`
 
 > *Notes and Rationale:*
-> - The identifier is compared in a case-insensitive manner, aligning with the Windows file system. While this may cause collisions on Linux systems, this is an acceptable trade-off to make manual creation of modinfo files more error tolerant.
-Therefore, the identifier should not be parsed.  
-> - Absolute paths identifiers are intended solely for development purposes to work locally on a developer's system. Absolute paths vary across operating systems (e.g., Linux uses `'/'` as a separator, while Windows uses `'\'` by default). No additional guarantees are provided for absolute paths. 
-> - Appending the mod's name to the path, with the syntax specified here, effectively makes the path invalid for Windows due to the `':'` character being prohibited in file names. 
+> - The identifier is compared in a case-insensitive manner, aligning with the Windows file system. While this may cause collisions on Linux systems, this is an acceptable trade-off to make manual creation of modinfo files more error-tolerant.
+> - Absolute path identifiers are intended solely for development purposes to work locally on a developer's system. Absolute paths vary across operating systems (e.g., Linux uses `'/'` as a separator, while Windows uses `'\'` by default). No additional guarantees are provided for absolute paths.
+> - Appending the mod's name to the path with the syntax specified here effectively makes the path invalid for Windows due to the `':'` character being prohibited in file names.
+
 
 #### Steam Workshops Mods
 
 For Steam Workshop mods, the identifier is the mod's Steam Workshop ID. 
 
 In the case the mod's location produces multiple mod instances due to variant modinfo files, append the variant's name to the Steam Workshops ID.
-**`Identifier := STEAM_WS_ID (':' MOD_NAME)?`**
 
-*Example (Workshop Mod)* 
-`Identifier = "1234567890"`
 
-*Example (Variant Workshop Mod)* 
-`Identifier = "1234567890:Variant1"`
+
+For Steam Workshop mods, the rule `steam_id` applies. The base identifier is the mod's Steam Workshop ID (`STEAM_WORKSHOPS_ID`).
+
+For all identifiers created from a variant modinfo file, append the mod's name, even if there is only one variant modinfo file, using the creation rule `appended_name`.
+
+*Example (Workshop Mod)*   
+`identifier = "1234567890"`
+
+*Example (Variant Workshop Mod)*  
+`identifier = "1234567890:Variant1"`
 
 
 #### Virtual Mods
 
-For virtual mods, the identifier is the mod identity data in JSON format. 
-
-**`Identifier := MOD_IDENTITY_JSON`**
+For virtual mods, the rule `virtual_id` applies, which uses the modinfo JSON string (`MODINFO_JSON`).
 
 *Example:* 
 ```
-Identifier = "{
+identifier = "{
   "name": "Virtual Mod Name",
   "version": "1.0.0",
   "dependencies": [
     "FullResolved", 
     {
       "modtype": 0,
-      "identifier": "./Mods/BaseMod"		
+      "identifier": "BaseMod"		
     }	
   ]
 }"`
 ```
 
-> *Implementation Note: Avoid deserialization of the identifier to check equality. 
-Instead a library should be used, that procudes stable JSON data, so the identifier can be compared on string level.*
-
+> **Implementation Note**: Avoid deserialization of the identifier to check equality.  
+Instead, a library should be used that produces stable JSON data, so the identifier can be compared at the string level.
 
 ---
 
